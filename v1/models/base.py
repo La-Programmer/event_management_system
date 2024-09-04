@@ -5,7 +5,7 @@ Contains class BaseModel
 
 from datetime import datetime
 from sqlalchemy import Column, String, DateTime
-from db import storage
+from db.engine import storage
 import uuid
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
