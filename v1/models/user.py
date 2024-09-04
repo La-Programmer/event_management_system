@@ -2,14 +2,13 @@
 """User model module"""
 
 from .base import BaseModel
-from db.engine import Base
+from db.engine import storage
 from datetime import datetime
 import bcrypt
 from sqlalchemy import Column, String, DateTime
 
-class User(BaseModel, Base):
+class User(BaseModel, storage.Model):
     """User model"""
-    __tablename__ = 'users'
     first_name = Column(String(128), nullable=False)
     last_name = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)

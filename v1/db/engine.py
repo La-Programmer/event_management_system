@@ -2,29 +2,18 @@
 """DB Module
 """
 
-from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
-from flask_sqlalchemy import SQLAlchemy
-import os
+from utils.get import get_classes
 
 
-load_dotenv()
-Base = declarative_base()
-classes = {
-    # 'User': User,
-    # 'Event': Event,
-    # 'Invitation': Invitation
-}
 class DB(SQLAlchemy):
     """Handle MySQL DB connection"""
     def get_object_by(self, obj_class_str, **kwargs):
         """Gets an object from the DB by a particular attribute
         """
-        obj_class = classes[obj_class_str]
+        obj_class = get_classes(obj_class_str)
         db_session = self.session
         raw_columns = obj_class.__table__.columns
         columns = [str(field).split('.')[1] for field in raw_columns]
@@ -43,7 +32,7 @@ class DB(SQLAlchemy):
         db_session = self.session
         try:
             db_session.commit()
-            print('Object save successfully')
+            print('Object saved successfully')
         except Exception as e:
             raise e
             
