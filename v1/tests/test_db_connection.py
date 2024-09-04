@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-import pytest
-from ..db import storage
-from ..db.engine import DB
+from v1.db.engine import storage
 
 def test_db_connection():
     """Test that db is running
