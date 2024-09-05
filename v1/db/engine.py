@@ -5,7 +5,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
-from utils.get import get_classes
+from ..utils.get import get_classes
 
 
 class DB(SQLAlchemy):
@@ -50,8 +50,8 @@ class DB(SQLAlchemy):
         """
         db_session = self.session
         name = obj.__class__.__name__
-        class_name = classes[name]
-        instance_object = db_session.query(class_name).filter_by(obj.id).first()
+        class_name = get_classes(name)
+        instance_object = self.get_object_by(class_name, id=obj.id)
         for key, value in kwargs.items():
             try:
                 setattr(instance_object, key, value)
@@ -84,6 +84,8 @@ class DB(SQLAlchemy):
         if obj is not None:
             try:
                 db_session.delete(obj)
+                self.save()
+                print('Deleted successfully')
             except Exception as e:
                 raise e
         else:

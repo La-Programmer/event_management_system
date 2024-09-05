@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-from db.engine import init_db, storage
-from models.user import User
+from ..db.engine import init_db, storage
+from ..models.user import User
 from dotenv import load_dotenv
 from flask import Flask, request, abort, make_response
 from flask_migrate import Migrate
 import os
+import traceback
 
 load_dotenv()
 
@@ -57,6 +58,10 @@ def get_user(user_id):
         return make_response({'message': str(user)}, 201)
     except Exception as e:
         print(f'Failed to get user from DB: {str(e)}')
+        return make_response({
+            'message': f'Failed to get user from DB:{str(e)}',
+            'traceback': f'{traceback.format_exc()}'
+            }, 500)
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5000, debug=True)
