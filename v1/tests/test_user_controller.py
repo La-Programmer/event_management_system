@@ -7,7 +7,7 @@ def test_get_all_users(flask_app, create_test_users):
     with flask_app.app_context():
         try:
             users = user.get_all_users()
-            assert len(users) == 5
+            assert len(users) == 6
         except Exception as e:
             pytest.fail(str(e))
 

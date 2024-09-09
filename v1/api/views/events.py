@@ -28,9 +28,10 @@ def get_events():
     """
     try:
         user_id = get_jwt_identity()
+        print(user_id)
         events = event.get_events_by_owner(user_id)
-        if events is None:
-            return make_response({'message': 'No events were found'}, 404)
+        if events is None or events == []:
+            return make_response({'message': 'No events were found for this user'}, 404)
         result = [event_instance.to_dict() for event_instance in events]
         return make_response({'message': 'Events gotten successfully', 'result': result}, 200)
     except Exception as e:
@@ -43,7 +44,7 @@ def create_event():
     """
     try:
         user_id = get_jwt_identity()
-        data = request.json_data()
+        data = request.get_json()
         data['event_owner'] = user_id
         new_event = event.create_event(data)
         result = new_event.to_dict()
@@ -57,7 +58,7 @@ def update_event(event_id):
     """Update an event
     """
     try:
-        data = request.json_data()
+        data = request.get_json()
         user_id = get_jwt_identity()
         updated_event = event.update_event(event_id, user_id, data)
         result = updated_event.to_dict()
@@ -75,8 +76,8 @@ def delete_event(event_id):
     try:
         user_id = get_jwt_identity()
         event.delete_event(event_id, user_id)
-        return make_response({'message': f'Event deleted successfully'}, 200)
+        return make_response({'message': 'Event deleted successfully'}, 200)
     except AccessDenied as a:
-        return make_response({'message': f'Unauthorized action', 'exception': str(e)}, 401)
+        return make_response({'message': 'Unauthorized action', 'exception': str(e)}, 401)
     except Exception as e:
-        return make_response({'message': f'Failed to delete event', 'exception': str(e)}, 500)
+        return make_response({'message': 'Failed to delete event', 'exception': str(e)}, 500)
