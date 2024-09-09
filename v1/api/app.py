@@ -73,8 +73,7 @@
 # if __name__ == '__main__':
 #     app.run(host='localhost', port=5000, debug=True)
 from .app_factory import create_app
-from .app_config import DevConfig
 
 if __name__ == '__main__':
-    app = create_app(DevConfig)
+    app = create_app()
     app.run(host='localhost', port=5000, debug=True)

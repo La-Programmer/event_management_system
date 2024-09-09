@@ -4,11 +4,12 @@
 
 def get_classes(obj_str):
     from ..models.user import User
-    if obj_str == User:
+    from ..models.events import Event
+    if obj_str == User or obj_str == Event:
         return obj_str
     classes = {
         'User': User,
-        # 'Event': Event,
+        'Event': Event,
         # 'Invitation': Invitation
     }
     obj = classes.get(obj_str)
