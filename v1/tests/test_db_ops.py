@@ -8,7 +8,7 @@ def test_db_connection(db_instance):
     """
     assert db_instance.is_alive() == True
 
-def test_wrong_user_creation(flask_app, user_instance, auth_controller_instance):
+def test_wrong_user_creation(flask_app, user_instance, auth_controller_instance, db_instance):
     """Test that wrong user creation raises exception
     """
     auth_controller_instance.register_user({
@@ -28,6 +28,9 @@ def test_wrong_user_creation(flask_app, user_instance, auth_controller_instance)
     with pytest.raises(IntegrityError):
         with flask_app.app_context():
             user.save_new()
+    
+    user = db_instance.get_object_by('User', email=user.email)
+    user.delete()
 
 def test_create_user(db_instance, user_instance):
     """Test that user is successfully created in DB

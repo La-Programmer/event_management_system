@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import pytest
-from sqlalchemy.exc import IntegrityError
 
 def test_user_registration(flask_app, auth_controller_instance, db_instance):
     """Test that a user is correctly registered
