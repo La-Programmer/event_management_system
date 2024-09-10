@@ -19,8 +19,10 @@ class Invitation(BaseModel, storage.Model):
     def __init__(self, *args, **kwargs):
         """Initialize User"""
         try:
-            status = kwargs['status']
-            self.validate_status(status)
+            status = kwargs.get('status')
+            if status is None:
+                kwargs["status"] = 'pending'
+            self.validate_status(kwargs.get('status'))
             super().__init__(*args, **kwargs)
         except Exception:
             raise
