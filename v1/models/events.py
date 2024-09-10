@@ -12,7 +12,7 @@ class Event(BaseModel, storage.Model):
     event_name = Column(String(128), nullable=False)
     event_location = Column(String(128), nullable=False)
     date_time = Column(DateTime, nullable=False)
-    invitation_link = Column(String(128), nullable=False)
+    invitation_link = Column(String(128))
 
     def __init__(self, *args, **kwargs):
         """Initialize User"""

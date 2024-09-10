@@ -3,6 +3,7 @@
 from v1.db.engine import storage
 from v1.models.events import Event
 from v1.utils.validate import validate_data
+from sqlalchemy.orm.exc import NoResultFound
 
 valid_keys = ['event_owner', 'event_name', 'event_location', 'date_time']
 
@@ -37,6 +38,8 @@ def get_event(event_id) -> Event | None:
         if event is None:
             return None
         return event
+    except NoResultFound:
+        return None
     except Exception:
         raise
 
