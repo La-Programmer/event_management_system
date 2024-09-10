@@ -16,6 +16,16 @@ valid_keys = [
         'status'
     ]
 
+def get_all_invitations():
+    """Get all events from the DB
+    """
+    try:
+        invitations = storage.get_all('Invitation')
+        invitation_dict_array = [invitation.to_dict() for invitation in invitations]
+        return invitation_dict_array
+    except Exception:
+        raise
+
 def create_invitation(invitation_info) -> Invitation:
     """Creates an invitation
     """
@@ -41,7 +51,7 @@ def get_invitation_by(**kwargs) -> Invitation | None:
     except Exception:
         raise
 
-def get_all_invitations_sent_by_user(user_id) -> list[Invitation] | None:
+def get_all_invitations_created_by_user(user_id) -> list[Invitation] | None:
     """Gets all invitaitions sent out by a user
     """
     try:
@@ -84,7 +94,7 @@ def get_all_inviations_for_a_status(user_id, event_id, status) -> list[Invitatio
         all_invitations = get_all_invitations_for_an_event(user_id, event_id)
         if all_invitations is None or all_invitations == []:
             return None
-        all_accepted_invitations = [invitation.status == status for invitation in all_invitations]
+        all_accepted_invitations = [invitation for invitation in all_invitations if invitation.status == status]
         return all_accepted_invitations
     except Exception:
         raise
