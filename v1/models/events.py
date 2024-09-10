@@ -3,8 +3,6 @@
 
 from .base import BaseModel
 from ..db.engine import storage
-from datetime import datetime
-import bcrypt
 from sqlalchemy import Column, String, DateTime, ForeignKey
 
 class Event(BaseModel, storage.Model):
