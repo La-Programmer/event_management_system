@@ -4,7 +4,6 @@ import pytest
 from datetime import datetime
 from v1.controllers import event
 from v1.controllers.event import AccessDenied
-from sqlalchemy.orm.exc import NoResultFound
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -101,26 +100,39 @@ def test_update_event_unauthorized(test_events):
     except Exception as e:
         pytest.fail(str(e))
 
-def test_delete_event(test_events):
+def test_delete_event(create_test_users):
     """Test deleting an event
     """
-    event1 = test_events[0]
-    event_id = event1.id
-    owner_id = event1.event_owner
+    owner = create_test_users[2]
+    owner_id = owner.id
+    data = {
+        'event_owner': owner_id,
+        'event_name': 'Mummy\'s birthday',
+        'event_location': '31 road, 4th avenue, Oba-ile',
+        'date_time': '2024-10-26T16:00:00.0000'
+    }
     try:
-        event.delete_event(event_id, owner_id)
-        non_existent = event.get_event(event_id)
+        new_event = event.create_event(data)
+        event.delete_event(new_event.id, owner_id)
+        non_existent = event.get_event(new_event.id)
         assert non_existent == None 
     except Exception as e:
         pytest.fails(str(e))
 
-def test_delete_event_unauthorized(test_events):
+def test_delete_event_unauthorized(create_test_users, test_events):
     """Test deleting an event as an unauthorized user
     """
-    event2 = test_events[1]
-    event_id = event2.id
+    owner = create_test_users[2]
+    owner_id = owner.id
+    data = {
+        'event_owner': owner_id,
+        'event_name': 'Mummy\'s birthday',
+        'event_location': '31 road, 4th avenue, Oba-ile',
+        'date_time': '2024-10-26T16:00:00.0000'
+    }
     try:
+        new_event = event.create_event(data)
         with pytest.raises(AccessDenied):
-            event.delete_event(event_id, '67890-98798-iu88u')
+            event.delete_event(new_event.id, '67890-98798-iu88u')
     except Exception as e:
         pytest.fails(str(e))

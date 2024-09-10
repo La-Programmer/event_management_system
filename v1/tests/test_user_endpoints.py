@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 import json
-import pytest
-from sqlalchemy.exc import IntegrityError
 
 def test_user_registration(test_client, db_instance):
         """Test user registration
@@ -49,7 +47,7 @@ def test_get_all_users(test_client, json_web_token):
       loaded_response = json.loads(response.data)
       assert response.status_code == 200
       assert loaded_response['message'] == 'Users gotten successfully'
-      assert len(loaded_response['result']) == 4
+      assert len(loaded_response['result']) == 5
 
 def test_get_user(test_client, json_web_token):
         """Test get user endpoint
