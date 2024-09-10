@@ -16,7 +16,7 @@ class AccessDenied(Exception):
     def __str__(self):
         return f"Access Denied: {self.message}"
 
-def create_event(event_info):
+def create_event(event_info) -> Event:
     """Creates an event
     """
     try:
@@ -29,7 +29,7 @@ def create_event(event_info):
     except Exception as e:
         raise
 
-def get_event(event_id):
+def get_event(event_id) -> Event | None:
     """Gets an event
     """
     try:
@@ -40,7 +40,7 @@ def get_event(event_id):
     except Exception:
         raise
 
-def get_events_by_owner(owner_id):
+def get_events_by_owner(owner_id) -> list[Event] | None:
     """Gets an event owned by a specific user
     """
     try:
@@ -51,7 +51,7 @@ def get_events_by_owner(owner_id):
     except Exception:
         raise
 
-def update_event(event_id, user_id, event_info):
+def update_event(event_id, user_id, event_info) -> Event:
     """Updates an event
     """
     try:
@@ -69,7 +69,7 @@ def update_event(event_id, user_id, event_info):
     except Exception:
         raise
 
-def delete_event(event_id, user_id):
+def delete_event(event_id, user_id) -> None:
     """Deletes an event
     """
     try:
