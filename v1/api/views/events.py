@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""User model API endpoints
+"""Event model API endpoints
 """
 from flask import request, make_response
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -64,9 +64,9 @@ def update_event(event_id):
         result = updated_event.to_dict()
         return make_response({'message': f'Event {updated_event.event_name} updated successfully', 'result': result}, 200)
     except AccessDenied as a:
-        return make_response({'message': f'Unauthorized action', 'exception': str(e)}, 401)
+        return make_response({'message': 'Unauthorized action', 'exception': str(e)}, 401)
     except Exception as e:
-        return make_response({'message': f'Failed to update event', 'exception': str(e)}, 500)
+        return make_response({'message': 'Failed to update event', 'exception': str(e)}, 500)
 
 @app_views.route('/events/<event_id>', methods=['DELETE'], strict_slashes=False)
 @jwt_required()
