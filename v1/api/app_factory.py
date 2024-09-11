@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
-from .app_config import DevConfig, TestConfig
 from ..db.engine import init_db, storage
+from .app_config import DevConfig, TestConfig
+from .views import app_views
+from v1.api.celery_config import celery_init_app
+from dotenv import load_dotenv
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
-from dotenv import load_dotenv
-from .views import app_views
 import os
 
 load_dotenv()
@@ -30,5 +31,5 @@ def create_app():
     # MODEL CREATION IN THE DB
     with app.app_context():
         storage.create_all()
-    
+    celery_init_app(app)
     return app
