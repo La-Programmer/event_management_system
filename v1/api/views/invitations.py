@@ -2,11 +2,13 @@
 """Invitations model API endpoints
 """
 
-from flask import request, make_response
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from . import app_views
 from ...controllers import invitation
 from ...controllers.event import AccessDenied
-from . import app_views
+from celery.result import AsyncResult
+from v1.api.celery_tasks import send_invitation
+from flask import request, make_response
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 @app_views.route('/invitations', methods=['GET'], strict_slashes=False)
 @jwt_required()
@@ -125,3 +127,35 @@ def delete_invitation(invitation_id):
     except Exception as e:
         return make_response({'message': 'Failed to create invitations', 'exception': str(e)}, 500)
 
+@app_views.route('/invitations/send_invitation/<invitation_id>', methods=['POST'], strict_slashes=False)
+@jwt_required()
+def send_invitation(invitation_id):
+    """Send out a single invitation
+    """
+    try:
+        result = send_invitation.delay(invitation_id)
+        return make_response({"result_id": result.id}, 200)
+    except Exception as e:
+        return make_response({'message': 'Failed to send invitations', 'exception': str(e)}, 500)
+
+@app_views.route('/invitations/monitor_invitations', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_results():
+    """Gets the status of sent out invitations
+    """
+    result_id = request.args.get('result_id')
+    result = AsyncResult(result_id)
+    if result.ready():
+        # Task has completed
+        if result.successful():
+            return {
+                "ready": result.ready(),
+                "successful": result.successful(),
+                "value": result.result,
+            }
+        else:
+        # Task completed with an error
+            return make_response({'status': 'ERROR', 'error_message': str(result.result)}, 200)
+    else:
+        # Task is still pending
+        return make_response({'status': 'Running'}, 200)
