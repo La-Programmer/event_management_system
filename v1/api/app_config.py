@@ -8,8 +8,14 @@ load_dotenv()
 
 # ENV VARIABLES
 secret = os.environ.get('SECRET')
+REDIS = os.environ.get('REDIS')
 
 class Config:
+    CELERY = {
+        "broker_url": REDIS,
+        "result_backend": REDIS,
+        "task_ignore_result": True,
+    }
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_SECRET_KEY = secret
 
