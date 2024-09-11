@@ -3,3 +3,4 @@ __pycache__
 *.pyc
 main.py
 v1/.env
+dump.rdb
