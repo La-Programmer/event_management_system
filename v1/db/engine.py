@@ -20,11 +20,36 @@ class DB(SQLAlchemy):
         for i in kwargs:
             if i not in columns:
                 raise InvalidRequestError
-        user = db_session.query(obj_class).filter_by(**kwargs).first()
-        if user is None:
+        obj = db_session.query(obj_class).filter_by(**kwargs).first()
+        if obj is None:
             raise NoResultFound
-        return user
+        return obj
 
+    def get_all(self, obj_class_str):
+        """Gets all instances of a model from the DB
+        """
+        obj_class = get_classes(obj_class_str)
+        db_session = self.session
+        try:
+            objs = db_session.query(obj_class).all()
+            return objs
+        except Exception as e:
+            raise e
+
+    def get_all_by(self, obj_class_str, **kwargs):
+        """Get all instances of an object that match the keyword argument
+        """
+        obj_class = get_classes(obj_class_str)
+        db_session = self.session
+        raw_columns = obj_class.__table__.columns
+        columns = [str(field).split('.')[1] for field in raw_columns]
+        for i in kwargs:
+            if i not in columns:
+                raise InvalidRequestError
+        obj = db_session.query(obj_class).filter_by(**kwargs).all()
+        if obj is None:
+            raise NoResultFound
+        return obj
 
     def save(self):
         """Commit all changes of the current DB session
@@ -48,7 +73,6 @@ class DB(SQLAlchemy):
     def update(self, obj, kwargs):
         """Updates a DB record
         """
-        db_session = self.session
         name = obj.__class__.__name__
         class_name = get_classes(name)
         instance_object = self.get_object_by(class_name, id=obj.id)

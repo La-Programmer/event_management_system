@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask_jwt_extended import create_access_token
 from v1.models.user import User
 from v1.db.engine import storage
+from v1.utils.validate import validate_data
 import bcrypt
 
 
@@ -25,20 +26,11 @@ class Auth:
     def __init__(self):
         self._db = storage
 
-    def validate_data(self, valid_keys, user_data: dict) -> bool:
-        """Validate the data sent to register a new user
-        """
-        received_keys = user_data.keys()
-        for key in valid_keys:
-            if key not in received_keys:
-                return False
-        return True        
-
     def register_user(self, user_info: dict) -> User | None:
         """Register unregistered user"""
         try:
             valid_keys = ['first_name', 'last_name', 'email', 'password', 'phoneNo']
-            if self.validate_data(valid_keys, user_info):
+            if validate_data(valid_keys, user_info):
                 new_user: User = User(**user_info)
                 new_user.save_new()
                 return new_user
@@ -75,7 +67,7 @@ class Auth:
         """Handle all authentication logic
         """
         valid_keys = ['email', 'password']
-        if self.validate_data(valid_keys, request_data):
+        if validate_data(valid_keys, request_data):
             email = request_data['email']
             password = request_data['password']
             if email and password:

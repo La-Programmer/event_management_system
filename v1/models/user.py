@@ -34,3 +34,9 @@ class User(BaseModel, storage.Model):
                 raise e
         else:
             super().__setattr__(name, value)
+    
+    def get_fullname(self) -> str:
+        """Get the full name of the user
+        """
+        fullname = f'{self.first_name} {self.last_name}'
+        return fullname

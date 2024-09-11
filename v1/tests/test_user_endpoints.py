@@ -1,14 +1,5 @@
 #!/usr/bin/env python3
 import json
-import pytest
-from sqlalchemy.exc import IntegrityError
-
-@pytest.fixture(scope="module")
-def test_client(flask_app):
-        """Create flask test client
-        """
-        with flask_app.test_client() as client:
-                yield client
 
 def test_user_registration(test_client, db_instance):
         """Test user registration
@@ -47,37 +38,58 @@ def test_user_auth(test_client, db_instance):
         user = db_instance.get_object_by('User', email=data['email'])
         user.delete()
 
-def test_get_all_users(test_client, db_instance, create_test_users):
+def test_get_all_users(test_client, json_web_token):
       """Test get all users endpoint
       """
-      response = test_client.get('/v1/api/users')
+      token, user = json_web_token
+      headers = {'Authorization': f'Bearer {token}'}
+      response = test_client.get('/v1/api/users', headers=headers)
       loaded_response = json.loads(response.data)
       assert response.status_code == 200
       assert loaded_response['message'] == 'Users gotten successfully'
-      assert len(loaded_response['users']) == 3
+      assert len(loaded_response['result']) == 5
 
-def test_get_user(test_client, db_instance, create_test_users):
+def test_get_user(test_client, json_web_token):
         """Test get user endpoint
         """
-        response = test_client.get('/v1/api/users/test2@gmail.com')
+        token, user = json_web_token
+        print(token)
+        headers = {'Authorization': f'Bearer {token}'}
+        response = test_client.get('/v1/api/users/test2@gmail.com', headers=headers)
         loaded_response = json.loads(response.data)
-        user_dict = loaded_response['user']
+        user_dict = loaded_response['result']
         assert response.status_code == 200
         assert loaded_response['message'] == 'User gotten successfully'
         assert user_dict['email'] == 'test2@gmail.com'
         assert user_dict['first_name'] == 'Test2'
 
-def test_update_user(test_client, db_instance, create_test_users):
+def test_get_user_without_login(test_client):
+        """Test get user endpoint
+        """
+        response = test_client.get('/v1/api/users/test2@gmail.com')
+        loaded_response = json.loads(response.data)
+        assert response.status_code == 401
+        assert loaded_response['msg'] == 'Missing Authorization Header'
+
+def test_update_user(test_client, json_web_token):
         """Test update user endpoint
         """
-        response1 = test_client.get('/v1/api/users/test2@gmail.com')
+        token, user = json_web_token
+        headers = {'Authorization': f'Bearer {token}'}
+        response1 = test_client.get('/v1/api/users/test2@gmail.com', headers=headers)
         assert response1.status_code == 200
         loaded_response = json.loads(response1.data)
-        user_id = loaded_response['user']['id']
+        user_id = loaded_response['result']['id']
         update_data = {'email': 'new_updated_email@gmail.com'}
-        response2 = test_client.put(f'/v1/api/users/{user_id}', data=json.dumps(update_data), content_type='application/json')
+        headers = {'Authorization': f'Bearer {token}'}
+        response2 = test_client.put(
+                f'/v1/api/users/{user_id}',
+                data=json.dumps(update_data),
+                content_type='application/json',
+                headers=headers
+        )
         loaded_response2 = json.loads(response2.data)
-        user = loaded_response['user']
-        updated_user = loaded_response2['user']
+        user = loaded_response['result']
+        updated_user = loaded_response2['result']
         assert user['id'] == updated_user['id']
         assert user['email'] != updated_user['email']
