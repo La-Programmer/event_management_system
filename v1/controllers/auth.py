@@ -2,8 +2,9 @@
 
 from dotenv import load_dotenv
 from flask_jwt_extended import create_access_token
-from v1.models.user import User
+from v1.controllers.user import get_user_by
 from v1.db.engine import storage
+from v1.models.user import User
 from v1.utils.validate import validate_data
 import bcrypt
 
@@ -33,7 +34,8 @@ class Auth:
             if validate_data(valid_keys, user_info):
                 new_user: User = User(**user_info)
                 new_user.save_new()
-                return new_user
+                result = get_user_by(id=new_user.id)
+                return result
             else:
                 raise Exception('Missing key or invalid key in request')
         except Exception as e:
