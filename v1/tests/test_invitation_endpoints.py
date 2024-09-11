@@ -146,6 +146,31 @@ def test_update_invitation(test_client, json_web_token, create_test_users, test_
     assert loaded_response2['message'] == 'Invitation updated successfully'
     assert loaded_response2['result']['message'] == update_data['message']
 
+def test_send_invitation(test_client, json_web_token):
+    """Test send invitation endpoint
+    """
+    token, user = json_web_token
+    headers = {'Authorization': f'Bearer {token}'}
+    response = test_client.get(f'/v1/api/invitations/invitations_sent', headers=headers)
+    loaded_response = json.loads(response.data)
+    assert response.status_code == 200
+    assert len(loaded_response["result"]) == 2
+    invitation1 = loaded_response["result"][0]
+    invitation_id = invitation1["id"]
+    response2 = test_client.post(f"/v1/api/invitations/send_invitation/{invitation_id}", headers=headers)
+    loaded_response2 = json.loads(response2.data)
+    assert response2.status_code == 200
+    assert loaded_response2["message"] == "Email sent successfully"
+    result_id = loaded_response2["result"]
+    print(result_id)
+    response3 = test_client.get(f"/v1/api/invitations/monitor_invitations?result_id={result_id}", headers=headers)
+    assert response3.status_code == 200
+    loaded_response3 = json.loads(response3.data)
+    if loaded_response3.get("status"):
+        assert loaded_response3.get("status") == "Running"
+    else:
+        assert loaded_response3.get("message") == "Email received by user successfully"
+
 def test_delete_invitation(test_client, json_web_token, create_test_users):
     """Test delete invitation endpoint
     """
@@ -162,3 +187,4 @@ def test_delete_invitation(test_client, json_web_token, create_test_users):
     print(loaded_response2)
     assert response2.status_code == 200
     assert loaded_response2['message'] == 'Invitation deleted successfully'
+

@@ -146,12 +146,12 @@ def delete_invitation(invitation_id):
 
 @app_views.route('/invitations/send_invitation/<invitation_id>', methods=['POST'], strict_slashes=False)
 @jwt_required()
-def send_invitation(invitation_id):
+def send_invitation_endpoint(invitation_id):
     """Send out a single invitation
     """
     try:
         result = send_invitation.delay(invitation_id)
-        return make_response({"result_id": result.id}, 200)
+        return make_response({"message": "Email sent successfully", "result": result.id}, 200)
     except Exception as e:
         return make_response({'message': 'Failed to send invitations', 'exception': str(e)}, 500)
 
@@ -165,14 +165,15 @@ def get_results():
     if result.ready():
         # Task has completed
         if result.successful():
-            return {
+            return make_response({
+                "message": "Email received by user successfully",
                 "ready": result.ready(),
                 "successful": result.successful(),
                 "value": result.result,
-            }
+            }, 200)
         else:
         # Task completed with an error
-            return make_response({'status': 'ERROR', 'error_message': str(result.result)}, 200)
+            return make_response({'status': 'ERROR', 'error_message': str(result.result)}, 500)
     else:
         # Task is still pending
         return make_response({'status': 'Running'}, 200)
