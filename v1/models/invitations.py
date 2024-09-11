@@ -5,7 +5,7 @@ from ..db.engine import storage
 from sqlalchemy import Column, String, ForeignKey
 
 class Invitation(BaseModel, storage.Model):
-    """The Invitation model
+    """Invitation model
     """
     recipient_id = Column(String(128), ForeignKey('user.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=True)
     sender_id = Column(String(128), ForeignKey('user.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
@@ -17,20 +17,8 @@ class Invitation(BaseModel, storage.Model):
     status = Column(String(10), default='pending')
 
     def __init__(self, *args, **kwargs):
-        """Initialize User"""
-        try:
-            status = kwargs.get('status')
-            if status is None:
-                kwargs["status"] = 'pending'
-            self.validate_status(kwargs.get('status'))
-            super().__init__(*args, **kwargs)
-        except Exception:
-            raise
-
-    def validate_status(self, status) -> None:
-        """Validate the value coming in for invitation status
-        """
-        valid_values = ['pending', 'sent', 'accepted', 'rejected']
-        if status not in valid_values:
-            raise ValueError('Invalid value for invitation attribute "status"')
-        return
+        """Initialize Invitation"""
+        status = kwargs.get('status')
+        if status is None:
+            kwargs["status"] = 'pending'
+        super().__init__(*args, **kwargs)

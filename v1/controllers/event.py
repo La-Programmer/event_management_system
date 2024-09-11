@@ -24,7 +24,8 @@ def create_event(event_info) -> Event:
         if validate_data(valid_keys, event_info):
             new_event: Event = Event(**event_info)
             new_event.save_new()
-            return new_event
+            result = get_event(new_event.id)
+            return result
         else:
             raise Exception('Missing key or invalid key in json data')
     except Exception as e:
