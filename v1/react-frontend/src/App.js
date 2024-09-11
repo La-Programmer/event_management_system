@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {BrowserRouter, Route, Routes } from "react-router-dom";
 
-function App() {
+import RegistrationForm from "./components/register";
+import LoginForm from "./components/Login";
+import EventCreationForm from "./components/EventCreationForm";
+import Dashboard from "./components/Dashboard";
+import Home from "./components/Home"
+import EventManagement from './components/EventManagement'
+
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <BrowserRouter>
+    <Routes>
+
+      <Route path="/" element={<Home />}></Route>
+
+      <Route path="/event" element={<EventCreationForm />}></Route>
+      <Route path="/admin" element={<Dashboard />}></Route>
+      <Route path="/login" element={<LoginForm />}></Route>
+      <Route path="/register" element={<RegistrationForm />}></Route>
+      <Route path="/eventmanage" element={<EventManagement />}></Route>
+    </Routes>
+    </BrowserRouter>
+    </>
   );
-}
+} 
 
 export default App;
