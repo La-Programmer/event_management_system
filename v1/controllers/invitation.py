@@ -33,7 +33,8 @@ def create_invitation(invitation_info) -> Invitation:
         if validate_data(valid_keys, invitation_info):
             new_invitation: Invitation = Invitation(**invitation_info)
             new_invitation.save_new()
-            return new_invitation
+            result = get_invitation_by(id=new_invitation.id)
+            return result
         else:
             raise Exception('Missing key or invalid key in json data')
     except Exception as e:

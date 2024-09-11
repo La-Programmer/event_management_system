@@ -57,7 +57,6 @@ class DB(SQLAlchemy):
         db_session = self.session
         try:
             db_session.commit()
-            print('Object saved successfully')
         except Exception as e:
             raise e
             

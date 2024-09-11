@@ -12,7 +12,7 @@ def test_get_all_invitations(test_invitations):
     try:
         invitations = invitation.get_all_invitations()
         assert invitations is not None
-        assert len(invitations) == 4
+        assert len(invitations) == 5
     except Exception as e:
         pytest.fail(str(e))
 
@@ -72,7 +72,7 @@ def test_get_all_invitations_created_by_user(create_test_users):
     user_id = create_test_users[5].id
     try:
         invitations = invitation.get_all_invitations_created_by_user(user_id)
-        assert len(invitations) == 4
+        assert len(invitations) == 5
         invitation1 = invitations[0]
         invitation2 = invitations[1]
         invitation3 = invitations[2]

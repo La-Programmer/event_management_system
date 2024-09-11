@@ -32,7 +32,7 @@ def test_get_event(test_events):
         assert event4.event_owner == test_events[3].event_owner
         assert event4.date_time == test_events[3].date_time
     except Exception as e:
-        pytest.faile(str(e))
+        pytest.fail(str(e))
 
 def test_get_events_by_owner(test_events, create_test_users):
     """Test function that gets all the events of a user
@@ -46,7 +46,7 @@ def test_get_events_by_owner(test_events, create_test_users):
         assert events[0].event_name != events[1].event_name
         assert events[1].event_name != events[2].event_name
     except Exception as e:
-        pytest.fails(str(e))
+        pytest.fail(str(e))
 
 
 def test_create_event(create_test_users):
@@ -117,7 +117,7 @@ def test_delete_event(create_test_users):
         non_existent = event.get_event(new_event.id)
         assert non_existent == None 
     except Exception as e:
-        pytest.fails(str(e))
+        pytest.fail(str(e))
 
 def test_delete_event_unauthorized(create_test_users, test_events):
     """Test deleting an event as an unauthorized user
@@ -135,4 +135,4 @@ def test_delete_event_unauthorized(create_test_users, test_events):
         with pytest.raises(AccessDenied):
             event.delete_event(new_event.id, '67890-98798-iu88u')
     except Exception as e:
-        pytest.fails(str(e))
+        pytest.fail(str(e))
