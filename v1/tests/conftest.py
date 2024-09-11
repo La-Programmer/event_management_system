@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-from v1.db.engine import storage
 from v1.api.app_factory import create_app
 from v1.controllers import event 
-from v1.models.user import User
 from v1.controllers.auth import Auth
+from v1.controllers import invitation
+from v1.db.engine import storage
+from v1.models.user import User
 import json
 import pytest
 import os
@@ -80,6 +81,13 @@ def create_test_users(flask_app, auth_controller_instance):
             'email': 'test5@gmail.com',
             'phoneNo': '0987654321'
         },
+        {
+            'first_name': 'Invitation_sender',
+            'last_name': 'Sender',
+            'password': 'hu7uhhs&89wbu',
+            'email': 'invitation@gmail.com',
+            'phoneNo': '0908284617'
+        }
     ]
     with flask_app.app_context():
         try:
@@ -167,17 +175,67 @@ def json_web_token(test_client):
         'password': 'auth_password',
         'email': 'auth_tester1@gmail.com', 
     }
-    # try:
-    test_client.post('/v1/api/users/register', data=json.dumps(data), content_type='application/json')
-    response = test_client.post('/v1/api/users/auth', data=json.dumps(credentials), content_type='application/json')
-    response_data = json.loads(response.data)
-    print(response_data)
-    assert response.status_code == 200
-    token = response_data['token']
-    user = response_data['result']
-    yield token, user
-    user = storage.get_object_by('User', email=data['email'])
-    user.delete()
-    # except Exception as e:
-    #     pytest.fail(str(e))
+    try:
+        test_client.post('/v1/api/users/register', data=json.dumps(data), content_type='application/json')
+        response = test_client.post('/v1/api/users/auth', data=json.dumps(credentials), content_type='application/json')
+        response_data = json.loads(response.data)
+        print(response_data)
+        assert response.status_code == 200
+        token = response_data['token']
+        user = response_data['result']
+        yield token, user
+        user = storage.get_object_by('User', email=data['email'])
+        user.delete()
+    except Exception as e:
+        pytest.fail(str(e))
 
+@pytest.fixture(scope="session")
+def test_invitations(create_test_users, test_events):
+    """Create test invitation objects
+    """
+    owner_ids = [user.id for user in create_test_users]
+    event_ids = [event.id for event in test_events]
+    print("Event IDs", event_ids)
+    data = [
+        {
+            'recipient_id': owner_ids[0],
+            'sender_id': owner_ids[len(owner_ids) - 1],
+            'event_id': event_ids[0],
+            'recipient_name': create_test_users[0].get_fullname(),
+            'recipient_number': create_test_users[0].phoneNo,
+            'recipient_email': create_test_users[0].email,
+            'message': 'You are invited to my wedding',
+        },
+        {
+            'recipient_id': owner_ids[1],
+            'sender_id': owner_ids[len(owner_ids) - 1],
+            'event_id': event_ids[0],
+            'recipient_name': create_test_users[1].get_fullname(),
+            'recipient_number': create_test_users[1].phoneNo,
+            'recipient_email': create_test_users[1].email,
+            'message': 'You are invited to my wedding',
+        },
+        {
+            'recipient_id': owner_ids[2],
+            'sender_id': owner_ids[len(owner_ids) - 1],
+            'event_id': event_ids[4],
+            'recipient_name': create_test_users[2].get_fullname(),
+            'recipient_number': create_test_users[2].phoneNo,
+            'recipient_email': create_test_users[2].email,
+            'message': 'You are invited to my party',
+        },
+        {
+            'recipient_id': owner_ids[3],
+            'sender_id': owner_ids[len(owner_ids) - 1],
+            'event_id': event_ids[5],
+            'recipient_name': create_test_users[3].get_fullname(),
+            'recipient_number': create_test_users[3].phoneNo,
+            'recipient_email': create_test_users[3].email,
+            'message': 'You are invited to my Christmas party',
+        }
+    ]
+    test_invitations_list = []
+    for invitation_data in data:
+        new_invitations = invitation.create_invitation(invitation_data)
+        test_invitations_list.append(new_invitations)
+    yield test_invitations_list
