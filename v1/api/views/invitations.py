@@ -122,7 +122,7 @@ def update_invitation(invitation_id):
     try:
         user_id = get_jwt_identity()
         data = request.get_json()
-        updated_invitation = invitation.update_invitation(user_id, invitation_id, data)
+        updated_invitation = invitation.update_invitation(invitation_id, data, user_id)
         result = updated_invitation.to_dict()
         return make_response({'message': 'Invitation updated successfully', 'result': result}, 200)
     except AccessDenied as a:
@@ -150,8 +150,23 @@ def send_invitation_endpoint(invitation_id):
     """Send out a single invitation
     """
     try:
-        result = send_invitation.delay(invitation_id)
+        invitation_to_send = invitation.get_invitation_by(id=invitation_id)
+        result = send_invitation.delay(invitation_to_send.to_dict())
         return make_response({"message": "Email sent successfully", "result": result.id}, 200)
+    except Exception as e:
+        return make_response({'message': 'Failed to send invitation', 'exception': str(e)}, 500)
+
+@app_views.route("/invitations/send_all_invitations/<event_id>", methods=["POST"], strict_slashes=False)
+@jwt_required()
+def send_all_invitations_endpoint(event_id):
+    """Send out all invitations for a specific event
+    """
+    user_id = get_jwt_identity()
+    try:
+        invitations_instance = invitation.get_all_invitations_for_an_event(user_id, event_id)
+        invitations = [invitation_obj.to_dict() for invitation_obj in invitations_instance]
+        result = send_invitation.delay(invitations)
+        return make_response({"message": "Emails sent successfully", "result": result.id}, 200)
     except Exception as e:
         return make_response({'message': 'Failed to send invitations', 'exception': str(e)}, 500)
 
@@ -174,6 +189,23 @@ def get_results():
         else:
         # Task completed with an error
             return make_response({'status': 'ERROR', 'error_message': str(result.result)}, 500)
-    else:
+    elif result.failed():
         # Task is still pending
+        return make_response({'status': 'Failed'}, 400)
+    else:
         return make_response({'status': 'Running'}, 200)
+
+@app_views.route("/invitations/rsvp/<invitation_id>/<recipient_email>", methods=["POST"], strict_slashes=False)
+@jwt_required()
+def rsvp(invitation_id, recipient_email):
+    """RSVP to event invitation
+    """
+    try:
+        data = request.get_json()
+        if "status" not in data:
+            return make_response({"message": "Invalid key or missing key detected in JSON request"})
+        updated_invitation = invitation.update_invitation(invitation_id, data, email=recipient_email)
+        result = updated_invitation.to_dict()
+        return make_response({"message": "You have accepted the invitation", "result": result}, 200)
+    except Exception as e:
+        return make_response({"status": "Error in responding to invitation", "exception": str(e)}, 500)

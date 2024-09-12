@@ -170,7 +170,7 @@ def test_update_invitation(create_test_users, test_invitations):
     invitation_id = test_invitations[3].id
     user_id = create_test_users[5].id
     try:
-        updated_invitation = invitation.update_invitation(user_id, invitation_id, data)
+        updated_invitation = invitation.update_invitation(invitation_id, data, user_id)
         assert updated_invitation.recipient_name == 'Hon. Ashibuogwu and Family'
         assert updated_invitation.message == 'It is my honour to invite you for my wedding as the chairman of the occassion'
     except Exception as e:
