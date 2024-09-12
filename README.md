@@ -1,27 +1,27 @@
-### EVENT MANAGEMENT SYSTEM
+# EVENT MANAGEMENT SYSTEM
 
-### Authors
+## Authors
 Justin Ebedi - [Github](https://github.com/La-Programmer)  
 Ahmed Issa - [Github](https://github.com/Ahmed-Is3a)
 
-### DESCRIPTION
+## DESCRIPTION
 An event management system that allows users to create events and send out invitation links to invitees. Invitees will have the capability to generate an invitation card which contains a unique QR code which will be used to verify the user when he/she goes for the event.
 
-### SETUP
+## SETUP
 1. Clone the github repository using the following command  
   
 For SSH: `git clone git@github.com:La-Programmer/event_management_system.git`  
 For HTTP: `git clone https://github.com/La-Programmer/event_management_system.git`  
   
 After cloning the repository, continue with the following steps.
-## Environment Setup
+### Environment Setup
 1. Start a virtual environment using python in the src directory `venv`;  
 `python -m venv <name_of_virtual_environment>`
 
 2. Install the project requirments using the following command;  
 `pip install -r requirements.txt`
 
-## DB Setup
+### DB Setup
 In this project, there is a test database and a development database  
   
 The following steps assume that you have mysql installed on your local system. If you do not find the installation steps here,  https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
@@ -35,7 +35,7 @@ Once you have installed and setup of mysql database, follow the steps below
 
 3. Setup your environment credentials using the .env.example file
 
-## START THE PROJECT USING THE FOLLWING STEPS
+## Start the project using the following steps
 1. Start redis in a different shell using the command below  
 `redis-server`
 
@@ -45,7 +45,7 @@ Once you have installed and setup of mysql database, follow the steps below
 3. Start the application by running the bash script 'run_flask_app' using the following command  
 `./run_flask_app`
 
-## RUN UNIT TESTS USING THE FOLLOWING STEPS
+## Run unit tests using the following steps
 The project contains using unit tests, and they can be ran using the following steps
 
 1. Start redis and celery using the commands in the previous steps above
