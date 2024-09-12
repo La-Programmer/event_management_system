@@ -15,10 +15,10 @@ For HTTP: `https://github.com/La-Programmer/event_management_system.git`
   
 After cloning the repository, continue with the following steps.
 ## Environment Setup
-1. Start a virtual environment using python in the src directory `venv`;
+1. Start a virtual environment using python in the src directory `venv`;  
 `python -m venv <name_of_virtual_environment>`
 
-2. Install the project requirments using the following command;
+2. Install the project requirments using the following command;  
 `pip install -r requirements.txt`
 
 ## DB Setup
