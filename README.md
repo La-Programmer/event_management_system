@@ -1,7 +1,7 @@
 ### EVENT MANAGEMENT SYSTEM
 
 ### Authors
-Justin Ebedi - [Github](https://github.com/La-Programmer)
+Justin Ebedi - [Github](https://github.com/La-Programmer)  
 Ahmed Issa - [Github](https://github.com/Ahmed-Is3a)
 
 ### DESCRIPTION
