@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+from v1.controllers import invitation
 
 def test_create_invitation(test_client, json_web_token, test_event_for_iv, create_test_users):
     """Test create invitation
@@ -159,10 +160,11 @@ def test_send_invitation(test_client, json_web_token):
     invitation_id = invitation1["id"]
     response2 = test_client.post(f"/v1/api/invitations/send_invitation/{invitation_id}", headers=headers)
     loaded_response2 = json.loads(response2.data)
+    print(loaded_response2)
+    print(invitation_id)
     assert response2.status_code == 200
     assert loaded_response2["message"] == "Email sent successfully"
     result_id = loaded_response2["result"]
-    print(result_id)
     response3 = test_client.get(f"/v1/api/invitations/monitor_invitations?result_id={result_id}", headers=headers)
     assert response3.status_code == 200
     loaded_response3 = json.loads(response3.data)
@@ -171,7 +173,63 @@ def test_send_invitation(test_client, json_web_token):
     else:
         assert loaded_response3.get("message") == "Email received by user successfully"
 
-def test_delete_invitation(test_client, json_web_token, create_test_users):
+def test_send_all_invitations(test_client, json_web_token):
+    """Test send all invitations for an event endpoint
+    """
+    token, user = json_web_token
+    headers = {'Authorization': f'Bearer {token}'}
+    event_from_api = test_client.get('/v1/api/events/your_events', headers=headers)
+    event = json.loads(event_from_api.data)['result'][0]
+    event_id = event['id']
+    response = test_client.post(f"/v1/api/invitations/send_all_invitations/{event_id}", headers=headers)
+    assert response.status_code == 200
+    loaded_response = json.loads(response.data)
+    assert loaded_response.get("message") == "Emails sent successfully"
+
+def test_rsvp(test_client, json_web_token):
+    """Test RSVP feature
+    """
+    token, user = json_web_token
+    headers = {"Authorization": f"Bearer {token}"}
+    response = test_client.get(f'/v1/api/invitations/invitations_sent', headers=headers)
+    loaded_response = json.loads(response.data)
+    assert response.status_code == 200
+    assert len(loaded_response["result"]) == 2
+    invitation1 = loaded_response["result"][0]
+    invitation1_id = invitation1.get("id")
+    invitation1_recipient_email = invitation1.get("recipient_email")
+    invitation2 = loaded_response["result"][1]
+    invitation2_id = invitation2.get("id")
+    invitation2_recipient_email = invitation2.get("recipient_email")
+    accept_data = {
+        "status": "accepted"
+    }
+    reject_data = {
+        "status": "rejected"
+    }
+    response2 = test_client.post(
+        f'/v1/api/invitations/rsvp/{invitation1_id}/{invitation1_recipient_email}',
+        data=json.dumps(accept_data),
+        content_type='application/json',
+        headers=headers
+    )
+    response3 = test_client.post(
+        f'/v1/api/invitations/rsvp/{invitation2_id}/{invitation2_recipient_email}',
+        data=json.dumps(reject_data),
+        content_type='application/json',
+        headers=headers
+    )
+    assert response2.status_code == 200
+    assert response3.status_code == 200
+    loaded_response2 = json.loads(response2.data)
+    loaded_response3 = json.loads(response3.data)
+    result1 = loaded_response2.get("result")
+    result2 = loaded_response3.get("result")
+    assert result1.get("status") == "accepted"
+    assert result2.get("status") == "rejected"
+
+
+def test_delete_invitation(test_client, json_web_token):
     """Test delete invitation endpoint
     """
     token, user = json_web_token

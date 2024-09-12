@@ -10,6 +10,5 @@ def celery_init_app(app: Flask) -> Celery:
     celery_app = Celery(app.name, task_cls=FlaskTask)
     celery_app.config_from_object(app.config["CELERY"])
     celery_app.set_default()
-    celery_app.autodiscover_tasks(["v1.api.celery_tasks"])
     app.extensions["celery"] = celery_app
     return celery_app
