@@ -8,13 +8,25 @@ load_dotenv()
 
 # ENV VARIABLES
 secret = os.environ.get('SECRET')
+mail_server = os.environ.get('MAIL_SERVER')
+mail_port = os.environ.get('MAIL_PORT')
+mail_username = os.environ.get('MAIL_USERNAME')
+mail_password = os.environ.get('MAIL_PASSWORD')
+REDIS = os.environ.get('REDIS')
 
 class Config:
     CELERY = {
-        "broker_url": "redis://localhost",
-        "result_backend": "redis://localhost",
+        "broker_url": REDIS,
+        "result_backend": REDIS,
         "task_ignore_result": True,
+        "broker_connection_retry_on_startup": True
     }
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+    MAIL_PASSWORD = mail_password
+    MAIL_PORT = mail_port
+    MAIL_SERVER = mail_server
+    MAIL_USERNAME = mail_username
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_SECRET_KEY = secret
 

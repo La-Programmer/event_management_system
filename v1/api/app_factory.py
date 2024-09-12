@@ -6,12 +6,21 @@ from .views import app_views
 from v1.api.celery_config import celery_init_app
 from dotenv import load_dotenv
 from flask import Flask
-from flask_jwt_extended import JWTManager
+from flask_mail import Mail
 from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
 import os
 
 load_dotenv()
+
+# ENV VARIABLES
 env = os.environ.get('ENV')
+MAIL_SERVER = os.environ.get('MAIL_SERVER')
+MAIL_PORT = os.environ.get('MAIL_PORT')
+MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS')
+MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL')
 if env == 'test':
     object = TestConfig
 else:
@@ -27,9 +36,15 @@ def create_app():
 
     # SETUP MIGRATIONS
     migrate = Migrate(app, storage)
+    
+    # INTEGRATE WITH CELERY
+    celery_init_app(app)
+
+    # INTEGRATE WITH FLASK MAIL
+    mail = Mail(app)
+    app.mail = mail
 
     # MODEL CREATION IN THE DB
     with app.app_context():
         storage.create_all()
-    celery_init_app(app)
     return app

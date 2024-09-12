@@ -12,7 +12,7 @@ def test_get_all_invitations(test_invitations):
     try:
         invitations = invitation.get_all_invitations()
         assert invitations is not None
-        assert len(invitations) == 4
+        assert len(invitations) == 5
     except Exception as e:
         pytest.fail(str(e))
 
@@ -72,7 +72,7 @@ def test_get_all_invitations_created_by_user(create_test_users):
     user_id = create_test_users[5].id
     try:
         invitations = invitation.get_all_invitations_created_by_user(user_id)
-        assert len(invitations) == 4
+        assert len(invitations) == 5
         invitation1 = invitations[0]
         invitation2 = invitations[1]
         invitation3 = invitations[2]
@@ -170,7 +170,7 @@ def test_update_invitation(create_test_users, test_invitations):
     invitation_id = test_invitations[3].id
     user_id = create_test_users[5].id
     try:
-        updated_invitation = invitation.update_invitation(user_id, invitation_id, data)
+        updated_invitation = invitation.update_invitation(invitation_id, data, user_id)
         assert updated_invitation.recipient_name == 'Hon. Ashibuogwu and Family'
         assert updated_invitation.message == 'It is my honour to invite you for my wedding as the chairman of the occassion'
     except Exception as e:

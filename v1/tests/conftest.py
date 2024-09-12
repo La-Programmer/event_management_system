@@ -190,9 +190,11 @@ def json_web_token(test_client):
         pytest.fail(str(e))
 
 @pytest.fixture(scope="session")
-def test_invitations(create_test_users, test_events):
+def test_invitations(create_test_users, test_events, json_web_token):
     """Create test invitation objects
     """
+    token, user = json_web_token
+    user_fullname = user['first_name'] + ' ' + user['last_name']
     owner_ids = [user.id for user in create_test_users]
     event_ids = [event.id for event in test_events]
     print("Event IDs", event_ids)
@@ -232,6 +234,15 @@ def test_invitations(create_test_users, test_events):
             'recipient_number': create_test_users[3].phoneNo,
             'recipient_email': create_test_users[3].email,
             'message': 'You are invited to my Christmas party',
+        },
+        {
+            'recipient_id': user['id'],
+            'sender_id': owner_ids[len(owner_ids) - 1],
+            'event_id': event_ids[5],
+            'recipient_name': user_fullname,
+            'recipient_number': user['phoneNo'],
+            'recipient_email': user['email'],
+            'message': 'You are invited to my Christmas party',
         }
     ]
     test_invitations_list = []
@@ -239,3 +250,20 @@ def test_invitations(create_test_users, test_events):
         new_invitations = invitation.create_invitation(invitation_data)
         test_invitations_list.append(new_invitations)
     yield test_invitations_list
+
+@pytest.fixture(scope="session")
+def test_event_for_iv(json_web_token):
+    """Create an event for test invitation generation in testing IV endpoints
+    """
+    token, user = json_web_token
+    event_data = {
+        'event_owner': user['id'],
+        'event_name': 'Evently product launch',
+        'event_location': 'Transcorp, Abuja',
+        'date_time': '2023-10-26T16:00:00.0000'   
+    }
+    try:
+        new_event = event.create_event(event_data)
+        return new_event
+    except Exception as e:
+        pytest.fail(str(e))

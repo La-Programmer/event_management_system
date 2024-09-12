@@ -33,7 +33,8 @@ def create_invitation(invitation_info) -> Invitation:
         if validate_data(valid_keys, invitation_info):
             new_invitation: Invitation = Invitation(**invitation_info)
             new_invitation.save_new()
-            return new_invitation
+            result = get_invitation_by(id=new_invitation.id)
+            return result
         else:
             raise Exception('Missing key or invalid key in json data')
     except Exception as e:
@@ -101,7 +102,7 @@ def get_all_inviations_for_a_status(user_id, event_id, status) -> list[Invitatio
 
 # THE REMAINING CRUD OPERATIONS (UPDATE AND DELETE)
 
-def update_invitation(user_id, invitation_id, invitation_info) -> Invitation:
+def update_invitation(invitation_id, invitation_info, user_id=None, email=None) -> Invitation:
     """Updated an invitation object
     """
     try:
@@ -109,13 +110,16 @@ def update_invitation(user_id, invitation_id, invitation_info) -> Invitation:
             invitation: Invitation = get_invitation_by(id=invitation_id)
             if invitation is None:
                 raise Exception('This invitation does not exist')
-            if invitation.sender_id != user_id:
-                raise AccessDenied('You do not have access to update these invitations')
-            invitation.update(**invitation_info)
-            updated_invitation = get_invitation_by(id=invitation_id)
-            return updated_invitation
+            if invitation.sender_id != user_id and invitation.recipient_email != email:
+                raise AccessDenied('You do not have access to update this invitation')
+            status = invitation_info.get("status")
+            if validate_update_status(status):
+                invitation.update(**invitation_info)
+                updated_invitation = get_invitation_by(id=invitation_id)
+                return updated_invitation
+            raise ValueError("Invalid value in status key")
         else:
-            raise Exception('Missing key or invalid key in json data')
+            raise KeyError('Missing key or invalid key in json data')
     except Exception:
         raise
 
@@ -132,3 +136,12 @@ def delete_invitation(user_id, invitation_id) -> None:
         return
     except Exception:
         raise
+
+# UTIL FUNCTIONS
+def validate_update_status(status):
+    """Valiate the value of the status key in the invitation
+    """
+    valid_keys = ["pending", "sent", "accepted", "rejected", None]
+    if status not in valid_keys:
+        return False
+    return True
