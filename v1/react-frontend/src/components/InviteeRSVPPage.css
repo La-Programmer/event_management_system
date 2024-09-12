@@ -1,0 +1,41 @@
+.body {
+  width: 800px;
+  margin: auto;
+  text-align: center;
+}
+
+.body h1 {
+  padding: 30px 0;
+}
+
+.form-group {
+  font-size: 24px;
+}
+
+.qrcode {
+  width: 200px;
+  height: 200px;
+}
+
+.btn-submit {
+  width: 250px;
+  font-size: 18px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 20px 0;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.btn-download {
+  height: 50px;
+  width: 150px;
+  margin-top: 10px;
+  background-color: blue;
+  color: white;
+  border: none;
+  font-size: 18px;
+  border-radius: 15px;
+}

@@ -7,6 +7,7 @@ import EventCreationForm from "./components/EventCreationForm";
 import Dashboard from "./components/Dashboard";
 import Home from "./components/Home"
 import EventManagement from './components/EventManagement'
+import InviteeRSVPPage from "./components/InviteeRSVPPage";
 
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
       <Route path="/login" element={<LoginForm />}></Route>
       <Route path="/register" element={<RegistrationForm />}></Route>
       <Route path="/eventmanage" element={<EventManagement />}></Route>
+      <Route path="/rsvp" element={<InviteeRSVPPage />}></Route>
     </Routes>
     </BrowserRouter>
     </>
