@@ -10,8 +10,8 @@ An event management system that allows users to create events and send out invit
 ### SETUP
 1. Clone the github repository using the following command  
   
-For SSH: `git@github.com:La-Programmer/event_management_system.git`  
-For HTTP: `https://github.com/La-Programmer/event_management_system.git`  
+For SSH: `git clone git@github.com:La-Programmer/event_management_system.git`  
+For HTTP: `git clone https://github.com/La-Programmer/event_management_system.git`  
   
 After cloning the repository, continue with the following steps.
 ## Environment Setup
