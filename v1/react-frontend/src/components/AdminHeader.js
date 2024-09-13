@@ -1,16 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
-import './Header.css'; // Import CSS for styling
+import { Link } from 'react-router-dom';
+import './Header.css';
 
 const Header = () => {
   return (
     <header className="header">
       <div className="header-logo">
-        EIMS
-        {/* Replace  logo image or text */}
+      <div>
         <Link to="/" className="logo">
-          <img src="/path/to/logo.png" alt="Logo" />
+          <span><span className='e'>E</span>IMS</span>
         </Link>
+      </div>
       </div>
       <nav className="header-nav">
         <ul>
