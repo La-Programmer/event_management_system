@@ -8,9 +8,13 @@ import Dashboard from "./components/Dashboard";
 import Home from "./components/Home"
 import EventManagement from './components/EventManagement'
 import InviteeRSVPPage from "./components/InviteeRSVPPage";
+import RSVPList from "./components/RSVPList";
+import InvitationForm from "./components/InvitationForm";
 
 
 const App = () => {
+  
+
   return (
     <>
     <BrowserRouter>
@@ -24,6 +28,9 @@ const App = () => {
       <Route path="/register" element={<RegistrationForm />}></Route>
       <Route path="/eventmanage" element={<EventManagement />}></Route>
       <Route path="/rsvp" element={<InviteeRSVPPage />}></Route>
+      <Route path="/rsvplist" element={<RSVPList />}></Route>
+
+      <Route path="/invit" element={ <InvitationForm/> } />
     </Routes>
     </BrowserRouter>
     </>
