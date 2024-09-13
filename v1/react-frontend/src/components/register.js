@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './register.css'
-const baseUrl = require('../apiBaseUrl')
+import './register.css';
+import { useNavigate } from 'react-router-dom';
+const baseUrl = require('../apiBaseUrl');
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,12 @@ const RegistrationForm = () => {
     password: '',
     passwordConfirm: ''
   });
+
+  const navigate = useNavigate();
+
+  const goToLogin = () => {
+    navigate('/login');
+  }
 
   const [errors, setErrors] = useState({});
   
@@ -56,7 +63,17 @@ const RegistrationForm = () => {
       const data = formatFormData(formData);
       console.log('Form data submitted:', data);
       axios.post(`${baseUrl}/users/register`, data)
-        .then()
+        .then((response) => {
+          console.log(response);
+          console.log(response.data);
+          if (response.status == 200) {
+            goToLogin();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log(error.data);
+        })
     } else {
       setErrors(formErrors);
     }

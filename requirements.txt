@@ -9,7 +9,9 @@ click-didyoumean==0.3.1
 click-plugins==1.1.1
 click-repl==0.3.0
 Flask==3.0.3
+Flask-Cors==5.0.0
 Flask-JWT-Extended==4.6.0
+Flask-Mail==0.10.0
 Flask-Migrate==4.0.7
 Flask-SQLAlchemy==3.1.1
 flask-swagger-ui==4.11.1

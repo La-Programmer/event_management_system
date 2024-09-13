@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css'
+import axios from 'axios';
 import event from './assets/event.png'
+const baseUrl = require('../apiBaseUrl');
+
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+
+  const navigate = useNavigate();
+
+  const goToDashboard = () => {
+    navigate('/admin');
+  };
 
   const [errors, setErrors] = useState({});
 
@@ -33,6 +41,18 @@ const LoginForm = () => {
     if (Object.keys(formErrors).length === 0) {
       // Handle form submission (e.g., send data to server)
       console.log('Form data submitted:', formData);
+      axios.post(`${baseUrl}/users/auth`, formData)
+        .then((response) => {
+          console.log(response);
+          console.log(response.data);
+          if (response.status == 200) {
+            goToDashboard();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log(error.data);
+        })
     } else {
       setErrors(formErrors);
     }

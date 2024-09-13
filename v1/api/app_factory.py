@@ -6,6 +6,7 @@ from .views import app_views
 from v1.api.celery_config import celery_init_app
 from dotenv import load_dotenv
 from flask import Flask
+from flask_cors import CORS
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
@@ -37,6 +38,9 @@ def create_app():
 
     # SETUP MIGRATIONS
     migrate = Migrate(app, storage)
+
+    # CORS SETTING
+    cors = CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
     
     # INTEGRATE WITH SWAGGER FOR DOCUMENTATION
     SWAGGER_URL="/swagger"
