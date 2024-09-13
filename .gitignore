@@ -4,3 +4,4 @@ __pycache__
 main.py
 v1/.env
 dump.rdb
+node_modules
