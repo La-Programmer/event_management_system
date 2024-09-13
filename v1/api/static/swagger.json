@@ -1,0 +1,416 @@
+{
+    "openapi": "3.0.0",
+  "info": {
+    "title": "Event Invitation Management Application API - OpenAPI 3.0",
+    "description": "This application is designed to manage the event invitations for event owners and planners.",
+    "contact": {
+      "email": "justinoghenekomebedi@gmail.com"
+    },
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "/v1/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "users",
+      "description": "All user endpoints"
+    },
+    {
+      "name": "events",
+      "description": "All event management endpoints"
+    },
+    {
+      "name": "invitations",
+      "description": "All invitation management endpoints"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get all users",
+        "operationId": "Get users",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Users gotten successfully"
+                    },
+                    "result": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{user_email}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get a user by email",
+        "operationId": "Get user",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Users gotten successfully"
+                    },
+                    "result": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update a user",
+        "operationId": "Update user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID used to get user",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "array"
+                    }
+                  },
+                  "example": {
+                    "message": "User updated successfully",
+                    "result":{
+                      "first_name": "James",
+                      "last_name": "Bond",
+                      "email": "james008@gmail.com",
+                      "phoneNo": "09088776567"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/register": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Register a user",
+        "operationId": "Register user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "phoneNo": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "array"
+                    }
+                  },
+                  "example": {
+                    "message": "User updated successfully",
+                    "result":{
+                      "first_name": "James",
+                      "last_name": "Bond",
+                      "email": "james008@gmail.com",
+                      "phoneNo": "09088776567"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/auth": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Login a user",
+        "operationId": "Login user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User authenticated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "array"
+                    }
+                  },
+                  "example": {
+                    "message": "User authenticated successfully",
+                    "result":{
+                      "first_name": "James",
+                      "last_name": "Bond",
+                      "email": "james008@gmail.com",
+                      "phoneNo": "09088776567"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "James"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Bond"
+          },
+          "email": {
+            "type": "string",
+            "example": "james007@gmail.com"
+          },
+          "phoneNo": {
+            "type": "string",
+            "example": "classified"
+          } 
+        },
+        "xml": {
+          "name": "user"
+        }
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "event_name": {
+            "type": "string",
+            "example": "Product launch"
+          },
+          "event_location": {
+            "type": "string",
+            "example": "Transcorp Hilton, Abuja"
+          },
+          "date_time": {
+            "type": "string",
+            "example": "24-09-17T:09:30:00.0000"
+          },
+          "invitation_link": {
+            "type": "string",
+            "example": "invitations/rsvp/10/100"
+          }
+        },
+        "xml": {
+          "name": "event"
+        }
+      },
+      "Invitation": {
+        "type": "object",
+        "properties": {
+          "recipient_id": {
+            "type": "string",
+            "example": "None"
+          },
+          "sender_id": {
+            "type": "string",
+            "example": "None"
+          },
+          "event_id": {
+            "type": "string",
+            "example": "None"
+          },
+          "recipient_name": {
+            "type": "string",
+            "example": "Lady Ademola"
+          },
+          "recipient_email": {
+            "type": "string",
+            "example": "ademolajumoke@gmail.com"
+          },
+          "message": {
+            "type": "string",
+            "example": "It is my honour to invite you to my product launch as a special guest"
+          },
+          "status": {
+            "type": "string",
+            "example": "pending"
+          }
+        },
+        "xml": {
+          "name": "invitation"
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
