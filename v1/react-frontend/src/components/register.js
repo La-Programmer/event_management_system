@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './register.css'
+const baseUrl = require('../apiBaseUrl')
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phoneNo: '',
     password: '',
     passwordConfirm: ''
   });
@@ -21,13 +24,28 @@ const RegistrationForm = () => {
   };
 
   const validateForm = () => {
-    const { name, email, password, passwordConfirm } = formData;
+    const { name, email, phoneNo, password, passwordConfirm } = formData;
     let formErrors = {};
     if (!name) formErrors.name = 'Name is required';
     if (!email) formErrors.email = 'Email is required';
+    if (!phoneNo) formErrors.phoneNo = 'Phone number is required';
     if (!password) formErrors.password = 'Password is required';
     if (password !== passwordConfirm) formErrors.passwordConfirm = 'Passwords do not match';
     return formErrors;
+  };
+
+  const formatFormData = (data) => {
+    const fullName = data['name'].split(' ');
+    const firstName = fullName[0];
+    const lastName = fullName[1];
+    const validFormat = {
+      first_name: firstName,
+      last_name: lastName,
+      email: data.email,
+      phoneNo: data.phoneNo,
+      password: data.password,
+    }
+    return validFormat;
   };
 
   const handleSubmit = (e) => {
@@ -35,7 +53,10 @@ const RegistrationForm = () => {
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
       // Handle form submission (e.g., send data to server)
-      console.log('Form data submitted:', formData);
+      const data = formatFormData(formData);
+      console.log('Form data submitted:', data);
+      axios.post(`${baseUrl}/users/register`, data)
+        .then()
     } else {
       setErrors(formErrors);
     }
@@ -67,6 +88,18 @@ const RegistrationForm = () => {
             onChange={handleChange}
           />
           {errors.email && <p className="error">{errors.email}</p>}
+        </div>
+        <div>
+          <label htmlFor="phoneNo">Phone Number (WhatsApp)</label>
+          <input
+            type="string"
+            id="phoneNo"
+            name="phoneNo"
+            placeholder='ex: +234 90888432'
+            value={formData.phoneNo}
+            onChange={handleChange}
+          />
+          {errors.email && <p className="error">{errors.phoneNo}</p>}
         </div>
         <div>
           <label htmlFor="password">Password</label>
