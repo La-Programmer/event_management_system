@@ -1,0 +1,58 @@
+.registration-form, .login-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  /* text-align: center; */
+}
+.login-form h2 {
+  text-align: center;
+}
+
+.form-image {
+  width: 100%;
+  max-width: 400px; /* Adjust as needed */
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 1em;
+}
+
+.registration-form div, .login-form div {
+  margin-bottom: 1em;
+}
+
+.registration-form label, .login-form label {
+  margin-bottom: .7em;
+  color: #333333;
+  display: block;
+}
+
+.registration-form input, .login-form input {
+  border: 1px solid #CCCCCC;
+  border-radius: 7px;
+  padding: 0.5em;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.registration-form button, .login-form button {
+  width: 100%;
+  padding: 0.7em;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.registration-form button:hover, .login-form button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  font-size: 0.875em;
+}

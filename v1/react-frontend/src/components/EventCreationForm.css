@@ -1,0 +1,64 @@
+/* CSS for EventCreation Compounent */
+.event-creation-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1em;
+    margin-top: 50px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .event-creation-form h2 {
+    text-align: center;
+    margin-bottom: 1em;
+  }
+  
+  .event-creation-form div {
+    margin-bottom: 1em;
+  }
+  
+  .event-creation-form label {
+    margin-bottom: .5em;
+    color: #333333;
+    display: block;
+  }
+  
+  .event-creation-form input[type="text"],
+  .event-creation-form input[type="date"],
+  .event-creation-form textarea {
+    border: 1px solid #CCCCCC;
+    padding: 0.5em;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .event-creation-form textarea {
+    height: 100px;
+  }
+  
+  .event-creation-form select,
+  .event-creation-form .privacy-toggle {
+    margin-bottom: 1em;
+  }
+  
+  .event-creation-form button {
+    padding: 0.7em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-right: 0.5em;
+  }
+  
+  .event-creation-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.875em;
+  }
+  
