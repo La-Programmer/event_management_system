@@ -60,7 +60,8 @@ The project contains using unit tests, and they can be ran using the following s
 1. Start redis and celery using the commands in the previous steps above
 
 2. Run tests using the bash script 'run_test' using the following command  
-   ```./run_test
+   ```
+   ./run_test
    ```
 
 There are 53 test and all tests should pass.
