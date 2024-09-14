@@ -13,18 +13,28 @@ An event management system that allows users to create events and send out invit
 
 1. Clone the github repository using the following command
 
-For HTTP: ```git clone https://github.com/La-Programmer/event_management_system.git```    
-For SSH: ```git clone git@github.com:La-Programmer/event_management_system.git```
+For HTTP: 
+```
+git clone https://github.com/La-Programmer/event_management_system.git
+```    
+For SSH: 
+```
+git clone git@github.com:La-Programmer/event_management_system.git
+```
 
 After cloning the repository, continue with the following steps.
 
 ### Environment Setup
 
 1. Start a virtual environment using python in the src directory `venv`;  
-   ```python -m venv my_env```
+   ```
+   python -m venv my_env
+   ```
 
 2. Install the project requirments using the following command;  
-   ```pip install -r requirements.txt```
+   ```
+   pip install -r requirements.txt
+   ```
 
 ### DB Setup
 
@@ -35,23 +45,33 @@ The following steps assume that you have mysql installed on your local system. I
 Once you have installed and setup of mysql database, follow the steps below
 
 1. Using mysql bench or mysql shell create a database called "event_planner" (you can use any database name you want but you will have to put that database name in your environment variable as DB)  
-   ```create database if not exists event_planner```   
+   ```
+   create database if not exists event_planner
+   ```   
 
 2. Using mysql bench or mysql shell create a database called "event_planner_test" (you can use any database name you want but you will have to put that database name in your environment variable as TEST_DB)  
-   ```create database if not exists <event_planner_test>```
+   ```
+   create database if not exists <event_planner_test>
+   ```
 
 3. Setup your environment credentials using the .env.example file
 
 ## Start the project using the following steps
 
 1. Start redis in a different shell using the command below  
-   ```redis-server```
+   ```
+   redis-server
+   ```
 
 2. Start celery in a different shell using the command below  
-   ```celery -A v1.api.celery_app worker --loglevel INFO```
+   ```
+   celery -A v1.api.celery_app worker --loglevel INFO
+   ```
 
 3. Start the application by running the bash script 'run_flask_app' using the following command  
-   ```./run_flask_app```
+   ```
+   ./run_flask_app
+   ```
 
 ## Run unit tests using the following steps
 
