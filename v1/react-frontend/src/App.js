@@ -10,6 +10,7 @@ import EventManagement from './components/EventManagement'
 import InviteeRSVPPage from "./components/InviteeRSVPPage";
 import RSVPList from "./components/RSVPList";
 import InvitationForm from "./components/InvitationForm";
+import EventDetails from "./components/EventDetails";
 
 
 const App = () => {
@@ -31,6 +32,8 @@ const App = () => {
       <Route path="/rsvplist" element={<RSVPList />}></Route>
 
       <Route path="/invit" element={ <InvitationForm/> } />
+      <Route path="/eventdetails" element={ <EventDetails/> } />
+
     </Routes>
     </BrowserRouter>
     </>
