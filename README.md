@@ -9,6 +9,10 @@ Ahmed Issa - [Github](https://github.com/Ahmed-Is3a)
 
 An event management system that allows users to create events and send out invitation links to invitees. Invitees will have the capability to generate an invitation card which contains a unique QR code which will be used to verify the user when he/she goes for the event.
 
+This app is build using:
+   Backend: Flask for the API, Celery for task management, MySQL for the database, and Redis as the message broker for Celery.   
+   Frontend: React for the user interface.  
+
 ## SETUP
 
 1. Clone the github repository using the following command
@@ -58,30 +62,27 @@ Once you have installed and setup of mysql database, follow the steps below
 
 ## Start the project using the following steps
 
-1. Start redis in a different shell using the command below  
+1. Start redis in a different shell using the command  below    
    ```
    redis-server
    ```
 
-2. Start celery in a different shell using the command below  
+2. Start celery in a different shell    
    ```
    celery -A v1.api.celery_app worker --loglevel INFO
    ```
 
-3. Start the application by running the bash script 'run_flask_app' using the following command  
+3. Start the application by running the bash script 'run_flask_app' using  
    ```
    ./run_flask_app
    ```
 
-## Run unit tests using the following steps
-
-The project contains using unit tests, and they can be ran using the following steps
+## Run Unit Tests:
+To run unit Tests you shold first:
 
 1. Start redis and celery using the commands in the previous steps above
 
-2. Run tests using the bash script 'run_test' using the following command  
+2. Run tests using the bash script 'run_test' using:  
    ```
    ./run_test
    ```
-
-There are 53 test and all tests should pass.
