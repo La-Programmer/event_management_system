@@ -9,9 +9,9 @@ Ahmed Issa - [Github](https://github.com/Ahmed-Is3a)
 
 An event management system that allows users to create events and send out invitation links to invitees. Invitees will have the capability to generate an invitation card which contains a unique QR code which will be used to verify the user when he/she goes for the event.
 
-This app is build using:
-   Backend: Flask for the API, Celery for task management, MySQL for the database, and Redis as the message broker for Celery.   
-   Frontend: React for the user interface.  
+This app is build using:   
+   - Backend: Flask for the API, Celery for task management, MySQL for the database, and Redis as the message broker for Celery.    
+   - Frontend: React for the user interface.    
 
 ## SETUP
 
