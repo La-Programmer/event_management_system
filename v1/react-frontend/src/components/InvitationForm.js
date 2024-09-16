@@ -51,7 +51,7 @@ const InvitationForm = () => {
               onChange={(e) => setPhone(e.target.value)}
             ></input>
           </div>
-          <button type="submit">Send</button>
+          <button type="submit">Create</button>
         </form>
       </div>
     </>

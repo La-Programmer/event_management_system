@@ -1,39 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import './RSVPList.css'
+import axios from 'axios';
 import AdminHeader from './AdminHeader'
 import Sidebar from './Sidebar';
-
+import { useEvent } from '../hooks/useEvent';
+const baseUrl = require('../apiBaseUrl');
 
 
 const RSVPList = () => {
+  const { eventId } = useEvent();
   const [rsvps, setRsvps] = useState([]);
 
   useEffect(() => {
-    fetchRSVPs();
+    fetchRSVPs(`${baseUrl}/invitations/event/`);
   }, []);
 
-  const fetchRSVPs = async () => {
-    try {
-      // get data from api endpoint
-      const response = await fetch('https://api.example.com/rsvps');
-      const data = await response.json();
-      setRsvps(data);
-    } catch (error) {
-      console.error('Error fetching RSVPs:', error);
-      // using sample data for demonstarting purpose
-      setRsvps([
-        { name: 'Alice Johnson', status: 'yes', contact: 'alice@example.com' },
-        { name: 'Bob Smith', status: 'no', contact: 'bob@example.com' },
-        { name: 'Charlie Brown', status: 'maybe', contact: 'charlie@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-      ]);
-    }
+  const fetchRSVPs = () => {
+    axios.get(`${baseUrl}/invitations/event/${eventId}`)
+      .then((response) => {
+        if (response.status == 200) {
+          console.log("Invitations gotten successfully");
+          setRsvps(response.data.result);
+        } else if (response.status == 401) {
+          console.log(`Failed to get invitations ${response.data.msg}`);
+        }
+      })
+      .catch((error) => {
+        console.log(`Failed to get invitations ${error.data.exception}`);
+      });
   };
 
 

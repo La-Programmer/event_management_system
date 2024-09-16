@@ -17,7 +17,7 @@ def get_event(event_id):
         if event_instance is None:
             return make_response({'message': 'No event was found'}, 404)
         result = event_instance.to_dict()
-        return make_response({'message': f'Event {event_instance.event_name} gotten successfully'}, 200)
+        return make_response({'message': f'Event {event_instance.event_name} gotten successfully', 'result': result}, 200)
     except Exception as e:
         return make_response({'message': 'Failed to get events', 'exception': str(e)}, 500)
 
