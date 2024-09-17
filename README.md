@@ -15,27 +15,24 @@ This app is build using:
 
 ## SETUP
 
-1. Clone the github repository using the following command
-
+1. Clone the repository using the following command   
 For HTTP: 
 ```
 git clone https://github.com/La-Programmer/event_management_system.git
 ```    
-For SSH: 
+After cloning the repository, continue with the following steps.   
+#### Navigate the project folder :   
 ```
-git clone git@github.com:La-Programmer/event_management_system.git
+cd event_management_system
 ```
 
-After cloning the repository, continue with the following steps.
-
-### Environment Setup
-
-1. Start a virtual environment using python in the src directory `venv`;  
+### Environment Setup   
+1. Start a virtual environment using python in the src directory `venv`    
    ```
    python -m venv my_env
-   ```
+   ```   
 
-2. Install the project requirments using the following command;  
+2. Install the requirments:  
    ```
    pip install -r requirements.txt
    ```
