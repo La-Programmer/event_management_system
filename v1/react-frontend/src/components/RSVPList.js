@@ -1,49 +1,72 @@
 import React, { useState, useEffect } from 'react';
 import './RSVPList.css'
+import axios from 'axios';
 import AdminHeader from './AdminHeader'
 import Sidebar from './Sidebar';
+import { useEvent } from '../hooks/useEvent';
+const baseUrl = require('../apiBaseUrl');
 
 
+const token = localStorage.getItem('token');
+
+const headers = {
+  'Authorization': `Bearer ${token}`
+}
 
 const RSVPList = () => {
+  const { event } = useEvent();
   const [rsvps, setRsvps] = useState([]);
+  
+  const data = {};
+
+  const fetchRSVPs = () => {
+    axios.get(`${baseUrl}/invitations`, {headers: headers})
+      .then((response) => {
+        if (response.status == 200) {
+          console.log("Invitations gotten successfully");
+          console.log(response.data.result);
+          setRsvps(response.data.result);
+        } else if (response.status == 401) {
+          console.log(`Failed to get invitations ${response.data.msg}`);
+        }
+      })
+      .catch((error) => {
+        console.log(`Failed to get invitations ${error}`);
+      });
+    };
+    
 
   useEffect(() => {
     fetchRSVPs();
   }, []);
-
-  const fetchRSVPs = async () => {
-    try {
-      // get data from api endpoint
-      const response = await fetch('https://api.example.com/rsvps');
-      const data = await response.json();
-      setRsvps(data);
-    } catch (error) {
-      console.error('Error fetching RSVPs:', error);
-      // using sample data for demonstarting purpose
-      setRsvps([
-        { name: 'Alice Johnson', status: 'yes', contact: 'alice@example.com' },
-        { name: 'Bob Smith', status: 'no', contact: 'bob@example.com' },
-        { name: 'Charlie Brown', status: 'maybe', contact: 'charlie@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-        { name: 'Diana Prince', status: 'yes', contact: 'diana@example.com' },
-      ]);
-    }
-  };
-
-
-  const handleSendReminder = (email) => {
+    
+  const handleSendEmail = (email, invitationId) => {
     console.log(`Sending reminder to ${email}`);
-    // Implement reminder logic here
+    axios.post(`${baseUrl}/invitations/send_invitation/${invitationId}`, data, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Success sending invitation");
+        } else {
+          console.log("Error then", response);
+        }
+      })
+      .catch((error) => {
+        console.log("Error catch", error);
+      })
   };
 
-  const handleSendRemindersToAll = () => {
-    rsvps.forEach(rsvp => handleSendReminder(rsvp.contact));
+  const handleSendEmailToAll = () => {
+    axios.post(`${baseUrl}/invitations/send_all_invitations/${event}`, data, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Success sending invitations");
+        } else {
+          console.log("Error then", response);
+        }
+      })
+      .catch((error) => {
+        console.log("Error catch", error);
+      })
   };
 
   const counts = rsvps.reduce((acc, rsvp) => {
@@ -82,12 +105,12 @@ return acc;
         <tbody>
           {rsvps.map((rsvp, index) => (
             <tr key={index}>
-              <td>{rsvp.name}</td>
+              <td>{rsvp.recipient_name}</td>
               <td>{rsvp.status}</td>
-              <td>{rsvp.contact}</td>
+              <td>{rsvp.recipient_email}</td>
               <td>
-                <button onClick={() => handleSendReminder(rsvp.contact)} className="btn-send-reminder">
-                  Send Reminder
+                <button onClick={() => handleSendEmail(rsvp.recipient_email, rsvp.id)} className="btn btn-info">
+                  Send Email
                 </button>
               </td>
             </tr>
@@ -96,7 +119,7 @@ return acc;
       </table>
     </div>
 
-      <button onClick={handleSendRemindersToAll} className="btn-send-all">Send Reminders to All</button>
+      <button onClick={handleSendEmailToAll} className="btn-send-all">Send Emails to All</button>
     </div>
     </>
   );

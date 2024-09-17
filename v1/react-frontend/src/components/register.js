@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './register.css'
-const baseUrl = require('../apiBaseUrl')
+import './register.css';
+import { useNavigate } from 'react-router-dom';
+const baseUrl = require('../apiBaseUrl');
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phoneNo: '',
     password: '',
     passwordConfirm: ''
   });
+
+  const navigate = useNavigate();
+
+  const goToLogin = () => {
+    navigate('/login');
+  }
 
   const [errors, setErrors] = useState({});
   
@@ -24,9 +32,10 @@ const RegistrationForm = () => {
   };
 
   const validateForm = () => {
-    const { name, email, phoneNo, password, passwordConfirm } = formData;
+    const { firstName, lastName, email, phoneNo, password, passwordConfirm } = formData;
     let formErrors = {};
-    if (!name) formErrors.name = 'Name is required';
+    if (!firstName) formErrors.firstName = 'First Name is required';
+    if (!lastName) formErrors.lastName = 'Name is required';
     if (!email) formErrors.email = 'Email is required';
     if (!phoneNo) formErrors.phoneNo = 'Phone number is required';
     if (!password) formErrors.password = 'Password is required';
@@ -35,12 +44,9 @@ const RegistrationForm = () => {
   };
 
   const formatFormData = (data) => {
-    const fullName = data['name'].split(' ');
-    const firstName = fullName[0];
-    const lastName = fullName[1];
     const validFormat = {
-      first_name: firstName,
-      last_name: lastName,
+      first_name: data.firstName,
+      last_name: data.lastName,
       email: data.email,
       phoneNo: data.phoneNo,
       password: data.password,
@@ -56,7 +62,17 @@ const RegistrationForm = () => {
       const data = formatFormData(formData);
       console.log('Form data submitted:', data);
       axios.post(`${baseUrl}/users/register`, data)
-        .then()
+        .then((response) => {
+          console.log(response);
+          console.log(response.data);
+          if (response.status === 200) {
+            goToLogin();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log(error.data);
+        })
     } else {
       setErrors(formErrors);
     }
@@ -66,16 +82,27 @@ const RegistrationForm = () => {
     <div className="registration-form">
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Full Name</label>
+      <div>
+          <label htmlFor="firstName">First Name</label>
           <input
             type="text"
             id="name"
-            name="name"
-            value={formData.name}
+            name="firstName"
+            value={formData.firstName}
             onChange={handleChange}
           />
-          {errors.name && <p className="error">{errors.name}</p>}
+          {errors.firstName && <p className="error">{errors.firstName}</p>}
+        </div>
+        <div>
+          <label htmlFor="lastName">Last Name</label>
+          <input
+            type="text"
+            id="name"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+          {errors.lastName && <p className="error">{errors.lastName}</p>}
         </div>
         <div>
           <label htmlFor="email">Email</label>
