@@ -7,37 +7,66 @@ import { useEvent } from '../hooks/useEvent';
 const baseUrl = require('../apiBaseUrl');
 
 
-const RSVPList = () => {
-  const { eventId } = useEvent();
-  const [rsvps, setRsvps] = useState([]);
+const token = localStorage.getItem('token');
 
-  useEffect(() => {
-    fetchRSVPs(`${baseUrl}/invitations/event/`);
-  }, []);
+const headers = {
+  'Authorization': `Bearer ${token}`
+}
+
+const RSVPList = () => {
+  const { event } = useEvent();
+  const [rsvps, setRsvps] = useState([]);
+  
+  const data = {};
 
   const fetchRSVPs = () => {
-    axios.get(`${baseUrl}/invitations/event/${eventId}`)
+    axios.get(`${baseUrl}/invitations`, {headers: headers})
       .then((response) => {
         if (response.status == 200) {
           console.log("Invitations gotten successfully");
+          console.log(response.data.result);
           setRsvps(response.data.result);
         } else if (response.status == 401) {
           console.log(`Failed to get invitations ${response.data.msg}`);
         }
       })
       .catch((error) => {
-        console.log(`Failed to get invitations ${error.data.exception}`);
+        console.log(`Failed to get invitations ${error}`);
       });
-  };
+    };
+    
 
-
-  const handleSendReminder = (email) => {
+  useEffect(() => {
+    fetchRSVPs();
+  }, []);
+    
+  const handleSendEmail = (email, invitationId) => {
     console.log(`Sending reminder to ${email}`);
-    // Implement reminder logic here
+    axios.post(`${baseUrl}/invitations/send_invitation/${invitationId}`, data, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Success sending invitation");
+        } else {
+          console.log("Error then", response);
+        }
+      })
+      .catch((error) => {
+        console.log("Error catch", error);
+      })
   };
 
-  const handleSendRemindersToAll = () => {
-    rsvps.forEach(rsvp => handleSendReminder(rsvp.contact));
+  const handleSendEmailToAll = () => {
+    axios.post(`${baseUrl}/invitations/send_all_invitations/${event}`, data, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Success sending invitations");
+        } else {
+          console.log("Error then", response);
+        }
+      })
+      .catch((error) => {
+        console.log("Error catch", error);
+      })
   };
 
   const counts = rsvps.reduce((acc, rsvp) => {
@@ -76,12 +105,12 @@ return acc;
         <tbody>
           {rsvps.map((rsvp, index) => (
             <tr key={index}>
-              <td>{rsvp.name}</td>
+              <td>{rsvp.recipient_name}</td>
               <td>{rsvp.status}</td>
-              <td>{rsvp.contact}</td>
+              <td>{rsvp.recipient_email}</td>
               <td>
-                <button onClick={() => handleSendReminder(rsvp.contact)} className="btn-send-reminder">
-                  Send Reminder
+                <button onClick={() => handleSendEmail(rsvp.recipient_email, rsvp.id)} className="btn btn-info">
+                  Send Email
                 </button>
               </td>
             </tr>
@@ -90,7 +119,7 @@ return acc;
       </table>
     </div>
 
-      <button onClick={handleSendRemindersToAll} className="btn-send-all">Send Reminders to All</button>
+      <button onClick={handleSendEmailToAll} className="btn-send-all">Send Emails to All</button>
     </div>
     </>
   );

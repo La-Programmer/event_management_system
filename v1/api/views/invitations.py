@@ -112,6 +112,7 @@ def create_invitation():
         result = new_invitation.to_dict()
         return make_response({'message': 'Invitation created successfully', 'result': result}, 200)
     except Exception as e:
+        print(str(e))
         return make_response({'message': 'Failed to create invitations', 'exception': str(e)}, 500)
 
 @app_views.route('/invitations/<invitation_id>', methods=['PUT'], strict_slashes=False)
@@ -168,6 +169,7 @@ def send_all_invitations_endpoint(event_id):
         result = send_invitation.delay(invitations)
         return make_response({"message": "Emails sent successfully", "result": result.id}, 200)
     except Exception as e:
+        print(e)
         return make_response({'message': 'Failed to send invitations', 'exception': str(e)}, 500)
 
 @app_views.route('/invitations/monitor_invitations', methods=['GET'], strict_slashes=False)

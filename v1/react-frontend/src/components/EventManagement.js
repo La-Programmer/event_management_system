@@ -10,7 +10,6 @@ const baseUrl = require('../apiBaseUrl');
 // fetching events from an API
 
 const token = localStorage.getItem('token');
-
 const headers = {
   'Authorization': `Bearer ${token}`
 }
@@ -83,8 +82,17 @@ const EventManagementPage = () => {
               <td>{event.date_time}</td>
               <td>{event.event_location}</td>
               <td>
-                <Link to={`/rsvplist`} className="btn btn-info">View</Link>
-                <Link to={`/edit-event/${event.id}`} className="btn btn-warning">Edit</Link>
+                <button className="btn btn-info p-0" onClick={() => setEvent(event.id)}>
+                  <Link to={`/invite`} className="btn">Create IVs</Link>
+                </button>
+                <button className='btn btn-warning p-0' onClick={() => setEvent(event.id)}>
+                  <Link to={`/rsvplist`} className="btn">View IVs</Link>
+                </button>
+                <button className='btn btn-secondary p-0' onClick={() => setEvent(event.id)}>
+                  <Link to={`/event-create`} className='btn'>
+                    Edit Event Details
+                  </Link>
+                </button>
                 <button onClick={() => handleDelete(event.id)} className="btn btn-danger">Delete</button>
               </td>
             </tr>

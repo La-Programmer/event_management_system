@@ -44,9 +44,6 @@ const RegistrationForm = () => {
   };
 
   const formatFormData = (data) => {
-    // const fullName = data['name'].split(' ');
-    // const firstName = fullName[0];
-    // const lastName = fullName[1];
     const validFormat = {
       first_name: data.firstName,
       last_name: data.lastName,
