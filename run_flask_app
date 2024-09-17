@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m v1.api.app
+python3 -m v1.api.app
