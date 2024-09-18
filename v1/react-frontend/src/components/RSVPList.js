@@ -22,11 +22,11 @@ const RSVPList = () => {
   const fetchRSVPs = () => {
     axios.get(`${baseUrl}/invitations`, {headers: headers})
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           console.log("Invitations gotten successfully");
           console.log(response.data.result);
           setRsvps(response.data.result);
-        } else if (response.status == 401) {
+        } else if (response.status === 401) {
           console.log(`Failed to get invitations ${response.data.msg}`);
         }
       })

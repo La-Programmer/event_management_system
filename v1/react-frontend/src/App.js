@@ -28,7 +28,7 @@ const App = () => {
             <Route path="/login" element={<LoginForm />}></Route>
             <Route path="/register" element={<RegistrationForm />}></Route>
             <Route path="/admin/eventmanage" element={<EventManagement />}></Route>
-            <Route path="/rsvp" element={<InviteeRSVPPage />}></Route>
+            <Route path="/rsvp/:invitationId" element={<InviteeRSVPPage />}></Route>
             <Route path="/rsvplist" element={<RSVPList />}></Route>
 
             <Route path="/invite" element={ <InvitationForm/> } />

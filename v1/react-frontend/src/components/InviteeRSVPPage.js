@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import "./InviteeRSVPPage.css"
 import qr from "./assets/gr_code.png"
+import { useParams } from 'react-router-dom';
 
 const InviteeRSVPPage = () => {
   const [rsvpStatus, setRsvpStatus] = useState('');
   const [showQRCode, setShowQRCode] = useState(false);
+
+  const { invitationId } = useParams();
+  console.log(invitationId);
 
   const handleRSVPChange = (e) => {
     setRsvpStatus(e.target.value);
@@ -24,7 +28,7 @@ const InviteeRSVPPage = () => {
 
   return (
     <div className="body">
-      <h1>RSVP for the Eventqqq</h1>
+      <h1>RSVP for the Event</h1>
       <form onSubmit={handleRSVPSubmit}>
         <div className="form-group">
           <label htmlFor="rsvp">Will you attend the event?</label>
