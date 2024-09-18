@@ -54,29 +54,51 @@ const RegistrationForm = () => {
     return validFormat;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
       // Handle form submission (e.g., send data to server)
-      const data = formatFormData(formData);
-      console.log('Form data submitted:', data);
-      axios.post(`${baseUrl}/users/register`, data)
-        .then((response) => {
-          console.log(response);
-          console.log(response.data);
-          if (response.status === 200) {
-            goToLogin();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log(error.data);
-        })
+        const data = formatFormData(formData);
+        console.log('Form data submitted:', data);
+
+        try {
+            const response = await axios.post(`${baseUrl}/users/register`, data);
+            console.log(response);
+            console.log(response.data);
+
+            if (response.status === 200) {
+                goToLogin();
+            } else {
+                alert('Unexpected response from server.');
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                // Axios-specific error handling
+                if (error.response) {
+                    // Server responded with a status other than 400
+                    if (error.response.status === 400) {
+                        alert('User already exists. Please use a different email.');
+                    } else {
+                        // General error handling
+                        alert('Failed to register user: ' + (error.response.data.message || 'Unknown error'));
+                    }
+                } else if (error.request) {
+                    alert('No response from server. Please try again later.');
+                } else {
+                    alert('Error in request setup: ' + error.message);
+                }
+                console.error('AxiosError details:', error.config, error.response, error.message);
+            } else {
+                // Handle non-Axios errors
+                alert('An unexpected error occurred: ' + error.message);
+                console.error('Unexpected error:', error);
+            }
+        }
     } else {
-      setErrors(formErrors);
+        setErrors(formErrors);
     }
-  };
+};
 
   return (
     <div className="registration-form">
