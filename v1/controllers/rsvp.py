@@ -12,6 +12,7 @@ def get_rsvp_data(invitation_id):
         rsvp_data = {
             "event_name": event_instance.event_name,
             "recipient_name": invitation_instance.recipient_name,
+            "recipient_number": invitation_instance.recipient_number,
             "message": invitation_instance.message
         }
         return rsvp_data
