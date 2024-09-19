@@ -40,12 +40,12 @@ const EventCreationForm = () => {
     });
   };
 
-  const handlePrivacyChange = (e) => {
-    setFormData({
-      ...formData,
-      privacy: e.target.value,
-    });
-  };
+  // const handlePrivacyChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     privacy: e.target.value,
+  //   });
+  // };
 
   const validateForm = () => {
     const { name, date, location } = formData;
