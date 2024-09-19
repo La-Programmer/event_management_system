@@ -20,7 +20,7 @@ const RSVPList = () => {
   const data = {};
 
   const fetchRSVPs = () => {
-    axios.get(`${baseUrl}/invitations`, {headers: headers})
+    axios.get(`${baseUrl}/invitations/event/${event}`, {headers: headers})
       .then((response) => {
         if (response.status === 200) {
           console.log("Invitations gotten successfully");

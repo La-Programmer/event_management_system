@@ -17,7 +17,7 @@ def get_rsvp_data(invitation_id):
     except Exception as e:
         return make_response({"message": "Error getting RSVP data", "exception": str(e)}, 500)
 
-@app_views.route("/rsvp/<invitation_id>", methods=["POST"], strict_slashes=False)
+@app_views.route("/rsvp_respond/<invitation_id>", methods=["POST"], strict_slashes=False)
 def rsvp_to_iv(invitation_id):
     """Invitees response to invitation
     """
