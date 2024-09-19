@@ -13,7 +13,9 @@
     "react-qr-code": "^2.0.15",
     "react-router-dom": "^6.26.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "qrcode.react": "^1.0.0",
+    "react-qr-reader": "^2.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
