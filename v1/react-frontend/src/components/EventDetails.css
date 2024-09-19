@@ -1,0 +1,25 @@
+.event-details {
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 70px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .event-details h1 {
+    margin-top: 0;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  p {
+    margin: 10px 0;
+  }
+  
+  strong {
+    font-weight: bold;
+  }
+  
