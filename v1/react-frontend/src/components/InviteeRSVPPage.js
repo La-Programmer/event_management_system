@@ -10,7 +10,7 @@ const InviteeRSVPPage = () => {
   const [rsvpStatus, setRsvpStatus] = useState('');
   const [showQRCode, setShowQRCode] = useState(false);
 
-  const { invitationId } = useParams();
+  const { invitationId, eventId } = useParams();
   console.log(invitationId);
 
   const handleRSVPChange = (e) => {
@@ -88,7 +88,7 @@ const InviteeRSVPPage = () => {
           <QRCode
             size={256}
             style={{ height: "auto", maxWidth: "30%", width: "30%" }}
-            value={invitation.recipient_name}
+            value={`http://localhost:3000/verification/${invitationId}/${eventId}`}
             viewBox={`0 0 256 256`}
           />
         </div>

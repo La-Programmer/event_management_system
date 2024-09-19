@@ -68,7 +68,7 @@ def update_event(event_id):
     except Exception as e:
         return make_response({'message': 'Failed to update event', 'exception': str(e)}, 500)
 
-@app_views.route('/events/<event_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/delete_event/<event_id>', methods=['DELETE'], strict_slashes=False)
 @jwt_required()
 def delete_event(event_id):
     """Delete an event

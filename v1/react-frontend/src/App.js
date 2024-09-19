@@ -10,6 +10,7 @@ import EventManagement from './components/EventManagement'
 import InviteeRSVPPage from "./components/InviteeRSVPPage";
 import RSVPList from "./components/RSVPList";
 import InvitationForm from "./components/InvitationForm";
+import Verify from "./components/Verify"
 
 
 const App = () => {
@@ -28,9 +29,9 @@ const App = () => {
             <Route path="/login" element={<LoginForm />}></Route>
             <Route path="/register" element={<RegistrationForm />}></Route>
             <Route path="/admin/eventmanage" element={<EventManagement />}></Route>
-            <Route path="/rsvp/:invitationId" element={<InviteeRSVPPage />}></Route>
+            <Route path="/rsvp/:invitationId/:eventId" element={<InviteeRSVPPage />}></Route>
             <Route path="/rsvplist" element={<RSVPList />}></Route>
-
+            <Route path="/verification/:invitationId/:eventId" element={<Verify/>}></Route>
             <Route path="/invite" element={ <InvitationForm/> } />
           </Routes>
         </BrowserRouter>
