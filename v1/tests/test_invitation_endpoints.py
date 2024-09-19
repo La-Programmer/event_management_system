@@ -166,6 +166,7 @@ def test_send_invitation(test_client, json_web_token):
     assert loaded_response2["message"] == "Email sent successfully"
     result_id = loaded_response2["result"]
     response3 = test_client.get(f"/v1/api/invitations/monitor_invitations?result_id={result_id}", headers=headers)
+    print(response3)
     assert response3.status_code == 200
     loaded_response3 = json.loads(response3.data)
     if loaded_response3.get("status"):

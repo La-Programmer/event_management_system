@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './EventCreationForm.css'
 import Sidebar from './Sidebar';
 import AdminHeader from './AdminHeader'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+const baseUrl = require('../apiBaseUrl');
 
 const EventCreationForm = () => {
   // Helper function to get today's date
@@ -17,11 +20,15 @@ const EventCreationForm = () => {
     name: '',
     date: getTodayDate(), // Default date is today in YYYY-MM-DD format
     location: '',
-    description: '',
-    privacy: 'public' // Default to public
   });
 
   const [errors, setErrors] = useState({});
+
+  const token = localStorage.getItem('token');
+
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +54,15 @@ const EventCreationForm = () => {
     return formErrors;
   };
 
+  const formatFormData = (data) => {
+    const validFormat = {
+      event_name: data.name,
+      event_location: data.location,
+      date_time: data.date,
+    }
+    return validFormat;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const formErrors = validateForm();
@@ -54,6 +70,19 @@ const EventCreationForm = () => {
       // Handle form submission (e.g., send data to server)
       console.log('Event data submitted:', formData);
       // Optionally, reset form or navigate to another page
+      const data = formatFormData(formData);
+      axios.post(`${baseUrl}/events`, data, {headers: headers})
+        .then((response) => {
+          console.log(response);
+          console.log(response.data);
+          if (response.status == 200) {
+            console.log("SUCCESSFUL");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log(error.data);
+        })
     } else {
       setErrors(formErrors);
     }
@@ -64,9 +93,7 @@ const EventCreationForm = () => {
     setFormData({
       name: '',
       date: getTodayDate(), // Reset to today’s date in YYYY-MM-DD format
-      location: '',
-      description: '',
-      privacy: 'public'
+      location: '', 
     });
     setErrors({});
   };
@@ -114,41 +141,6 @@ const EventCreationForm = () => {
               onChange={handleChange}
             />
             {errors.location && <p className="error">{errors.location}</p>}
-          </div>
-          <div>
-            <label htmlFor="description">Event Description</label>
-            <textarea
-              id="description"
-              name="description"
-              placeholder='description...'
-              value={formData.description}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Privacy</label>
-            <div>
-              <label>
-                <input
-                  type="radio"
-                  name="privacy"
-                  value="public"
-                  checked={formData.privacy === 'public'}
-                  onChange={handlePrivacyChange}
-                />
-                Public
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="privacy"
-                  value="private"
-                  checked={formData.privacy === 'private'}
-                  onChange={handlePrivacyChange}
-                />
-                Private
-              </label>
-            </div>
           </div>
           <button type="submit">Save</button>
           <button type="button" onClick={handleCancel}>Cancel</button>

@@ -112,6 +112,7 @@ def create_invitation():
         result = new_invitation.to_dict()
         return make_response({'message': 'Invitation created successfully', 'result': result}, 200)
     except Exception as e:
+        print(str(e))
         return make_response({'message': 'Failed to create invitations', 'exception': str(e)}, 500)
 
 @app_views.route('/invitations/<invitation_id>', methods=['PUT'], strict_slashes=False)
@@ -149,9 +150,14 @@ def delete_invitation(invitation_id):
 def send_invitation_endpoint(invitation_id):
     """Send out a single invitation
     """
+    user_id = get_jwt_identity()
+    invitation_info = {
+        "status": "sent"
+    }
     try:
         invitation_to_send = invitation.get_invitation_by(id=invitation_id)
         result = send_invitation.delay(invitation_to_send.to_dict())
+        invitation.update_invitation(invitation_id, invitation_info, user_id=user_id)
         return make_response({"message": "Email sent successfully", "result": result.id}, 200)
     except Exception as e:
         return make_response({'message': 'Failed to send invitation', 'exception': str(e)}, 500)
@@ -162,12 +168,18 @@ def send_all_invitations_endpoint(event_id):
     """Send out all invitations for a specific event
     """
     user_id = get_jwt_identity()
+    invitation_info = {
+        "status": "sent"
+    }
     try:
         invitations_instance = invitation.get_all_invitations_for_an_event(user_id, event_id)
         invitations = [invitation_obj.to_dict() for invitation_obj in invitations_instance]
         result = send_invitation.delay(invitations)
+        for invitation_instance in invitations:
+            invitation.update_invitation(invitation_instance["id"], invitation_info, user_id=user_id)
         return make_response({"message": "Emails sent successfully", "result": result.id}, 200)
     except Exception as e:
+        print(e)
         return make_response({'message': 'Failed to send invitations', 'exception': str(e)}, 500)
 
 @app_views.route('/invitations/monitor_invitations', methods=['GET'], strict_slashes=False)

@@ -2,6 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom'; // Assuming you're using React Router for navigation
 import './Header.css'; // Import CSS for styling
 
+const deleteJWT = () => {
+  localStorage.removeItem('token');
+  console.log(localStorage.getItem('token'));
+};
+
 const Header = () => {
   return (
     <header className="header">
@@ -15,10 +20,12 @@ const Header = () => {
       <nav className="header-nav">
         <ul>
           <li>
-            <Link to="/login">Notificatins</Link>
+            <Link>Notifications</Link>
           </li>
           <li>
-            <Link to="/signup">Log out</Link>
+            <button onClick={deleteJWT}>
+              <Link to="/login">Log out</Link>
+            </button>
           </li>
         </ul>
       </nav>
