@@ -11,6 +11,7 @@ import InviteeRSVPPage from "./components/InviteeRSVPPage";
 import RSVPList from "./components/RSVPList";
 import InvitationForm from "./components/InvitationForm";
 import Verify from "./components/Verify"
+import EventDetails from "./components/EventDetails";
 
 
 const App = () => {
