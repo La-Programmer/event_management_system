@@ -59,7 +59,7 @@ def register_user():
     try:
         # Check if the user already exists
         try:
-            user: User = storage.get_object_by('User', email=user_data.get('email'))
+            user = storage.get_object_by('User', email=user_data.get('email'))
             return make_response({'message': 'User already exists'}, 400)
         except Exception:
             new_user = auth.register_user(user_data)

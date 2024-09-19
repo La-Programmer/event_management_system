@@ -69,7 +69,7 @@ def send_bulk_mail(invitations: list[dict], event: dict) -> None:
                 sender="justinoghenekomeebedi@gmail.com",
                 recipients=[invitation['recipient_email']]
             )
-            msg.body = invitation.get('message')
+            msg.body = f"{invitation.get('message')}\nKindly click this link to RSVP http://localhost:3000/rsvp/{invitation.get('id')}/{invitation.get('event_id')}"
             with current_app.app_context():
                 counter = 0
                 while counter < 5:

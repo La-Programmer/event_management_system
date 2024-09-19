@@ -12,6 +12,7 @@ def get_rsvp_data(invitation_id):
         rsvp_data = {
             "event_name": event_instance.event_name,
             "recipient_name": invitation_instance.recipient_name,
+            "recipient_number": invitation_instance.recipient_number,
             "message": invitation_instance.message
         }
         return rsvp_data
@@ -39,13 +40,14 @@ def respond_to_iv(invitation_id, response):
     except Exception:
         raise
 
-def verify_qrcode(invitation_id, data):
+def verify_qrcode(invitation_id, event_id):
     """Verification of QRcode
     """
-    invitation_instance = invitation.get_invitation_by(id=invitation_id)
-    name = data.get("recipient_name")
-    phone_no = name = data.get("recipient_number")
-    if name == invitation_instance.recipient_name and phone_no == invitation_instance.recipient_number:
-        return True
-    else:
+    try:
+        invitation_instance = invitation.get_invitation_by(id=invitation_id)
+        if invitation_instance:
+            if invitation_instance.event_id == event_id:
+                return True
         return False
+    except Exception:
+        raise

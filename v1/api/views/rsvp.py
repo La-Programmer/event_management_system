@@ -17,7 +17,7 @@ def get_rsvp_data(invitation_id):
     except Exception as e:
         return make_response({"message": "Error getting RSVP data", "exception": str(e)}, 500)
 
-@app_views.route("/rsvp/<invitation_id>", methods=["POST"], strict_slashes=False)
+@app_views.route("/rsvp_respond/<invitation_id>", methods=["POST"], strict_slashes=False)
 def rsvp_to_iv(invitation_id):
     """Invitees response to invitation
     """
@@ -33,16 +33,15 @@ def rsvp_to_iv(invitation_id):
     except Exception as e:
         return make_response({"message": "Error responding to IV", "exception": str(e)}, 500)
 
-@app_views.route("/verify_qrcode/<invitation_id>", methods=["POST"], strict_slashes=False)
+@app_views.route("/verify_qrcode/<invitation_id>/<event_id>", methods=["GET"], strict_slashes=False)
 @jwt_required()
-def verify_qrcode(invitation_id):
+def verify_qrcode(invitation_id, event_id):
     """Verify an invitees QRcode
     """
     try:
-        data = request.json()
-        if rsvp.verify_qrcode(invitation_id, data):
-            make_response({"message": "User is verified"}, 200)
+        if rsvp.verify_qrcode(invitation_id, event_id):
+            return make_response({"message": "User is verified"}, 200)
         else:
-            make_response({"message": "This user is not invited"}, 202)
+            return make_response({"message": "This user is not invited"}, 202)
     except Exception as e:
-        make_response({"message": "Error verifying user", "exception": str(e)}, 500)
+        return make_response({"message": "Error verifying user", "exception": str(e)}, 500)

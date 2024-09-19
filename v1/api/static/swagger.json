@@ -25,6 +25,10 @@
     {
       "name": "invitations",
       "description": "All invitation management endpoints"
+    },
+    {
+      "name": "rsvp",
+      "description": "All RSVP endpoints"
     }
   ],
   "paths": {
@@ -34,7 +38,7 @@
           "users"
         ],
         "summary": "Get all users",
-        "operationId": "Get users",
+        "operationId": "1",
         "security": [
           {
             "BearerAuth": []
@@ -78,7 +82,7 @@
           "users"
         ],
         "summary": "Get a user by email",
-        "operationId": "Get user",
+        "operationId": "2",
         "security": [
           {
             "BearerAuth": []
@@ -123,7 +127,7 @@
           "users"
         ],
         "summary": "Update a user",
-        "operationId": "Update user",
+        "operationId": "3",
         "parameters": [
           {
             "name": "user_id",
@@ -192,7 +196,7 @@
           "users"
         ],
         "summary": "Register a user",
-        "operationId": "Register user",
+        "operationId": "4",
         "requestBody": {
           "content": {
             "application/json": {
@@ -228,16 +232,8 @@
                       "type": "string"
                     },
                     "result": {
-                        "type": "array"
-                    }
-                  },
-                  "example": {
-                    "message": "User updated successfully",
-                    "result":{
-                      "first_name": "James",
-                      "last_name": "Bond",
-                      "email": "james008@gmail.com",
-                      "phoneNo": "09088776567"
+                        "type": "object",
+                        "$ref": "#/components/schemas/User"
                     }
                   }
                 }
@@ -259,7 +255,7 @@
           "users"
         ],
         "summary": "Login a user",
-        "operationId": "Login user",
+        "operationId": "5",
         "requestBody": {
           "content": {
             "application/json": {
@@ -310,6 +306,973 @@
           },
           "404": {
             "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/events/{event_id}": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Get an event from DB",
+        "operationId": "6",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Event gotten successfully"
+                    },
+                    "result": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/Event"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "No event was found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/event/your_events": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Get all events for a user",
+        "operationId": "7",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Events gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Events gotten successfully"
+                    },
+                    "result": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "No events were found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/events/": {
+      "post": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Create an event",
+        "operationId": "8",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event_name": {
+                    "type": "string"
+                  },
+                  "event_owner": {
+                    "type": "string"
+                  },
+                  "event_location": {
+                    "type": "string"
+                  },
+                  "date_time": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Event created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/Event"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/events/update/{event_id}": {
+      "put": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Update an event",
+        "operationId": "9",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event_name": {
+                    "type": "string"
+                  },
+                  "event_owner": {
+                    "type": "string"
+                  },
+                  "event_location": {
+                    "type": "string"
+                  },
+                  "date_time": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Event updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/Event"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "Event not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/events/delete/{event_id}": {
+      "delete": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Delete an event",
+        "operationId": "10",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/Event"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "Event not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations": {
+      "get": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Get all invitations",
+        "operationId": "11",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitations gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invitations gotten successfully"
+                    },
+                    "result": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Invitation"
+                        }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "No invitations were found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations/{invitation_id}": {
+      "get": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Get an invitation",
+        "operationId": "12",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+           "200": {
+            "description": "Invitation gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invitation gotten successfully"
+                    },
+                    "result": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Invitation"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "No invitation was found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations/event/{event_id}": {
+      "get": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Get all invitations for an event",
+        "operationId": "13",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitations gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invitations gotten successfully"
+                    },
+                    "result": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Invitation"
+                        }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "No invitations were found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations/event/{event_id}/{status}": {
+      "get": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Get all invitations for an event by status",
+        "operationId": "14",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitations gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invitations gotten successfully"
+                    },
+                    "result": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Invitation"
+                        }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "No invitations were found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations/invitations_received": {
+      "get": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Get all invitations received by a user",
+        "operationId": "15",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitations gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invitations gotten successfully"
+                    },
+                    "result": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Invitation"
+                        }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "No invitations were found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations/invitations_sent": {
+      "get": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Get all invitations a user has sent out",
+        "operationId": "16",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitations gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invitations gotten successfully"
+                    },
+                    "result": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Invitation"
+                        }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "No invitations were found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations/": {
+      "post": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Create an invitation",
+        "operationId": "17",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "recipient_id": {
+                    "type": "string"
+                  },
+                  "event_id": {
+                    "type": "string"
+                  },
+                  "recipient_name": {
+                    "type": "string"
+                  },
+                  "recipient_number": {
+                    "type": "string"
+                  },
+                  "recipient_email": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Invitation created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/Invitation"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations/update/{invitation_id}": {
+      "put": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Update an invitation",
+        "operationId": "18",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "recipient_id": {
+                    "type": "string"
+                  },
+                  "event_id": {
+                    "type": "string"
+                  },
+                  "recipient_name": {
+                    "type": "string"
+                  },
+                  "recipient_number": {
+                    "type": "string"
+                  },
+                  "recipient_email": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Invitation updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/Invitation"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "No invitation found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations/delete/{invitation_id}": {
+      "delete": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Delete an invitation",
+        "operationId": "19",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitation deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/Invitation"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "Event not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations/send_invitation/{invitation_id}": {
+      "post": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Send out an invitation to its invitee",
+        "operationId": "20",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {}
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Invitation sent out successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/invitations/send_all_invitations/{event_id}": {
+      "post": {
+        "tags": [
+          "invitations"
+        ],
+        "summary": "Send out all invitations for an event",
+        "operationId": "21",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {}
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Invitations sent out successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                        "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/rsvp/{invitation_id}": {
+      "get": {
+        "tags": [
+          "rsvp"
+        ],
+        "summary": "Get the data to display on RSVP page",
+        "operationId": "21",
+        "responses": {
+            "200": {
+            "description": "RSVP gotten successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "RSVP data gotten successfully"
+                    },
+                    "result": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/RSVP"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "No invitations were found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+          }
+      }
+    },
+    "/rsvp_respond/{invitation_id}": {
+      "post": {
+        "tags": [
+          "rsvp"
+        ],
+        "summary": "Respond to an invitation",
+        "operationId": "21",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Responded to invitation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
+          },
+          "404": {
+            "description": "Cannot respond to non-existent invitation"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/verify_qrcode/{invitation_id/{event_id}": {
+      "get": {
+        "tags": [
+          "rsvp"
+        ],
+        "summary": "Verify an invitation",
+        "operationId": "22",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is invited to this event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User is invited to this event"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "User is not invited to this event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User is not invited to this event"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing Authorization Header"
           },
           "500": {
             "description": "Internal Server Error"
@@ -402,6 +1365,27 @@
         },
         "xml": {
           "name": "invitation"
+        }
+      },
+      "RSVP": {
+        "type": "object",
+        "properties": {
+          "event_name": {
+            "type": "string",
+            "example": "Product launch"
+          },
+          "recipient_name": {
+            "type": "string",
+            "example": "Ade Ojo"
+          },
+          "recipient_number": {
+            "type": "string",
+            "example": "+234 9123456789"
+          },
+          "message": {
+            "type": "string",
+            "example": "You are invited to the evently product launch"
+          }
         }
       }
     },
