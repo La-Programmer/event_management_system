@@ -140,7 +140,7 @@ def test_update_invitation(test_client, json_web_token, create_test_users, test_
     update_data = {
         'message': 'You are specially invited to my product launch as the chairman of the occassion'
     }
-    response2 = test_client.put(f'/v1/api/invitations/{invitation_id}', headers=headers, data=json.dumps(update_data), content_type='application/json')
+    response2 = test_client.put(f'/v1/api/invitations/update/{invitation_id}', headers=headers, data=json.dumps(update_data), content_type='application/json')
     assert response2.status_code == 200
     loaded_response2 = json.loads(response2.data)
     print("Loaded response 2", loaded_response2)
@@ -241,7 +241,7 @@ def test_delete_invitation(test_client, json_web_token):
     assert len(loaded_response["result"]) == 2
     invitation1 = loaded_response["result"][0]
     invitation_id = invitation1["id"]
-    response2 = test_client.delete(f'/v1/api/invitations/{invitation_id}', headers=headers)
+    response2 = test_client.delete(f'/v1/api/invitations/delete/{invitation_id}', headers=headers)
     loaded_response2 = json.loads(response2.data)
     print(loaded_response2)
     assert response2.status_code == 200

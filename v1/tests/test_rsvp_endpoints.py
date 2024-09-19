@@ -26,8 +26,8 @@ def test_rsvp_to_iv(test_client, json_web_token, test_invitations):
     headers = {'Authorization': f'Bearer {token}'}
     data = {"status": "true"}
     data2 = {"status": "false"}
-    response = test_client.post(f'/v1/api/rsvp/{invitation_id}', data=json.dumps(data), headers=headers, content_type='application/json')
-    response2 = test_client.post(f'/v1/api/rsvp/{invitation2_id}', data=json.dumps(data2), headers=headers, content_type='application/json')
+    response = test_client.post(f'/v1/api/rsvp_respond/{invitation_id}', data=json.dumps(data), headers=headers, content_type='application/json')
+    response2 = test_client.post(f'/v1/api/rsvp_respond/{invitation2_id}', data=json.dumps(data2), headers=headers, content_type='application/json')
     print(response.data)
     print(response2.data)
     assert response.status_code == 200

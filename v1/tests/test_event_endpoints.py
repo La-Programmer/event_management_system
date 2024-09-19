@@ -69,7 +69,7 @@ def test_update_event_endpoint(test_client, json_web_token):
         'event_location': 'Updated location'
     }
     response = test_client.put(
-        f'/v1/api/events/{event_id}',
+        f'/v1/api/events/update/{event_id}',
         data=json.dumps(event_data),
         content_type="application/json",
         headers=headers)
@@ -89,7 +89,7 @@ def test_delete_event_endpoint(test_client, json_web_token):
     event = json.loads(event_from_api.data)['result'][0]
     event_id = event['id']
     response = test_client.delete(
-        f'/v1/api/events/{event_id}',
+        f'/v1/api/events/delete/{event_id}',
         headers=headers
     )
     assert response.status_code == 200
