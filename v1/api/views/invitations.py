@@ -115,7 +115,7 @@ def create_invitation():
         print(str(e))
         return make_response({'message': 'Failed to create invitations', 'exception': str(e)}, 500)
 
-@app_views.route('/invitations/<invitation_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/invitations/update/<invitation_id>', methods=['PUT'], strict_slashes=False)
 @jwt_required()
 def update_invitation(invitation_id):
     """Update an existing invitation
@@ -131,7 +131,7 @@ def update_invitation(invitation_id):
     except Exception as e:
         return make_response({'message': 'Failed to create invitations', 'exception': str(e)}, 500)
 
-@app_views.route('/invitations/<invitation_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/invitations/delete/<invitation_id>', methods=['DELETE'], strict_slashes=False)
 @jwt_required()
 def delete_invitation(invitation_id):
     """Update an existing invitation
