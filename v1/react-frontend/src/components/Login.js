@@ -45,7 +45,12 @@ const LoginForm = () => {
         .then((response) => {
           console.log(response);
           console.log(response.data);
-          if (response.status == 200) {
+          if (response.status === 200) {
+            const result = response.data;
+            localStorage.setItem('token', result.token);
+            const token = localStorage.getItem('token');
+            console.log(`Local storage ${token}`);
+            localStorage.setItem('user', result.result)
             goToDashboard();
           }
         })

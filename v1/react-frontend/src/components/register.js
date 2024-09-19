@@ -7,7 +7,8 @@ const baseUrl = require('../apiBaseUrl');
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phoneNo: '',
     password: '',
@@ -31,9 +32,10 @@ const RegistrationForm = () => {
   };
 
   const validateForm = () => {
-    const { name, email, phoneNo, password, passwordConfirm } = formData;
+    const { firstName, lastName, email, phoneNo, password, passwordConfirm } = formData;
     let formErrors = {};
-    if (!name) formErrors.name = 'Name is required';
+    if (!firstName) formErrors.firstName = 'First Name is required';
+    if (!lastName) formErrors.lastName = 'Name is required';
     if (!email) formErrors.email = 'Email is required';
     if (!phoneNo) formErrors.phoneNo = 'Phone number is required';
     if (!password) formErrors.password = 'Password is required';
@@ -42,12 +44,9 @@ const RegistrationForm = () => {
   };
 
   const formatFormData = (data) => {
-    const fullName = data['name'].split(' ');
-    const firstName = fullName[0];
-    const lastName = fullName[1];
     const validFormat = {
-      first_name: firstName,
-      last_name: lastName,
+      first_name: data.firstName,
+      last_name: data.lastName,
       email: data.email,
       phoneNo: data.phoneNo,
       password: data.password,
@@ -55,44 +54,77 @@ const RegistrationForm = () => {
     return validFormat;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
       // Handle form submission (e.g., send data to server)
-      const data = formatFormData(formData);
-      console.log('Form data submitted:', data);
-      axios.post(`${baseUrl}/users/register`, data)
-        .then((response) => {
-          console.log(response);
-          console.log(response.data);
-          if (response.status == 200) {
-            goToLogin();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log(error.data);
-        })
+        const data = formatFormData(formData);
+        console.log('Form data submitted:', data);
+
+        try {
+            const response = await axios.post(`${baseUrl}/users/register`, data);
+            console.log(response);
+            console.log(response.data);
+
+            if (response.status === 200) {
+                goToLogin();
+            } else {
+                alert('Unexpected response from server.');
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                // Axios-specific error handling
+                if (error.response) {
+                    // Server responded with a status other than 400
+                    if (error.response.status === 400) {
+                        alert('User already exists. Please use a different email.');
+                    } else {
+                        // General error handling
+                        alert('Failed to register user: ' + (error.response.data.message || 'Unknown error'));
+                    }
+                } else if (error.request) {
+                    alert('No response from server. Please try again later.');
+                } else {
+                    alert('Error in request setup: ' + error.message);
+                }
+                console.error('AxiosError details:', error.config, error.response, error.message);
+            } else {
+                // Handle non-Axios errors
+                alert('An unexpected error occurred: ' + error.message);
+                console.error('Unexpected error:', error);
+            }
+        }
     } else {
-      setErrors(formErrors);
+        setErrors(formErrors);
     }
-  };
+};
 
   return (
     <div className="registration-form">
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Full Name</label>
+      <div>
+          <label htmlFor="firstName">First Name</label>
           <input
             type="text"
             id="name"
-            name="name"
-            value={formData.name}
+            name="firstName"
+            value={formData.firstName}
             onChange={handleChange}
           />
-          {errors.name && <p className="error">{errors.name}</p>}
+          {errors.firstName && <p className="error">{errors.firstName}</p>}
+        </div>
+        <div>
+          <label htmlFor="lastName">Last Name</label>
+          <input
+            type="text"
+            id="name"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+          {errors.lastName && <p className="error">{errors.lastName}</p>}
         </div>
         <div>
           <label htmlFor="email">Email</label>

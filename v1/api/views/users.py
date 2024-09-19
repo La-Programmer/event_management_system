@@ -6,6 +6,8 @@ from flask_jwt_extended import jwt_required
 from ...controllers.auth import Auth, UserNotFound
 from ...controllers import user
 from . import app_views
+from v1.db.engine import storage
+
 
 auth = Auth()
 
@@ -55,10 +57,15 @@ def register_user():
     """
     user_data = request.get_json()
     try:
-        new_user = auth.register_user(user_data)
-        if new_user is None:
-            return make_response({'message': 'Failed to register user controller returned "None"'}, 500)
-        return make_response({'message': 'User registered successfully'}, 200)
+        # Check if the user already exists
+        try:
+            user = storage.get_object_by('User', email=user_data.get('email'))
+            return make_response({'message': 'User already exists'}, 400)
+        except Exception:
+            new_user = auth.register_user(user_data)
+            if new_user is None:
+                return make_response({'message': 'Failed to register user controller returned "None"'}, 500)
+            return make_response({'message': 'User registered successfully'}, 200)
     except Exception as e:
         return make_response({'message': 'Failed to create new user', 'exception': str(e)}, 500)
 

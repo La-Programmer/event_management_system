@@ -12,14 +12,14 @@ def send_invitation(invitation: dict | list[dict]) -> None:
         print("Invitation is being sent")
         event = get_event(invitation.get("event_id"))
         try:
-            send_mail(invitation, event)
+            send_mail(invitation, event.to_dict())
             return
         except Exception:
             raise
     print("Invitations are being sent")
     event = get_event(invitation[0].get("event_id"))
     try:
-        send_bulk_mail(invitation, event)
+        send_bulk_mail(invitation, event.to_dict())
         return
     except Exception:
         raise
@@ -62,19 +62,22 @@ def send_bulk_mail(invitations: list[dict], event: dict) -> None:
     mail = current_app.mail
     with mail.connect() as conn:
         email_count = 0
+        print("Number of invitations", len(invitations))
         for invitation in invitations:
             msg = Message(
                 subject=subject,
                 sender="justinoghenekomeebedi@gmail.com",
-                recipients=[invitation['recipient_email'], 'justinebedi70@gmail.com']
+                recipients=[invitation['recipient_email']]
             )
-            msg.body = invitation.get('message')
+            msg.body = f"{invitation.get('message')}\nKindly click this link to RSVP http://localhost:3000/rsvp/{invitation.get('id')}/{invitation.get('event_id')}"
             with current_app.app_context():
                 counter = 0
                 while counter < 5:
                     sleep(1)
                     try:
                         conn.send(msg)
+                        email_count += 1
+                        break
                     except ConnectionRefusedError:
                         mail.send(msg)
                     except Exception as e:
@@ -82,4 +85,5 @@ def send_bulk_mail(invitations: list[dict], event: dict) -> None:
                     finally:
                         counter += 1
             print("1 invitation has been sent for the event")
+            print("Number of emails sent", email_count)
             sleep(1)

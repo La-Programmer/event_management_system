@@ -1,35 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import axios from 'axios';
 import './EventManagement.css'
 import AdminHeader from './AdminHeader'
 import Sidebar from './Sidebar'
+import { useEvent } from '../hooks/useEvent';
+const baseUrl = require('../apiBaseUrl');
 
 // fetching events from an API
-const fetchEvents = async () => {
-  // Replace with API call
-  return [
-    { id: 1, name: 'Event 1', date: '2024-09-10', location: 'Location 1' },
-    { id: 2, name: 'Event 2', date: '2024-09-12', location: 'Location 2' },
-  ];
-};
+
+const token = localStorage.getItem('token');
+const headers = {
+  'Authorization': `Bearer ${token}`
+}
+
 
 const EventManagementPage = () => {
+
+  const { event, setEvent } = useEvent();
   const [events, setEvents] = useState([]);
 
-  useEffect(() => {
-    const loadEvents = async () => {
-      const eventData = await fetchEvents();
-      setEvents(eventData);
+  const fetchEvents = () => {
+    axios.get(`${baseUrl}/events/your_events`, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Events gotten successfully");
+          setEvents(response.data.result);
+        } else if (response.status === 401) {
+          console.log(`Error getting events ${response.data.msg}`);
+        }
+      })
+      .catch((error) => {
+        console.log(`Error getting events catch ${error}`);
+      })
     };
 
+  useEffect(() => {
+    const loadEvents = () => {
+      fetchEvents();
+      console.log(events);
+    };
     loadEvents();
   }, []);
 
   const handleDelete = (eventId) => {
     // send a DELETE request to API
     console.log(`Deleting event with ID: ${eventId}`);
-    setEvents(events.filter(event => event.id !== eventId));
+    axios.delete(`${baseUrl}/events/${eventId}`, {headers: headers})
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Event deleted successfully");
+          setEvents(events.filter(event => event.id !== eventId));
+        } else {
+          console.log('Error deleting event');
+        }
+      })
   };
 
   return (
@@ -40,7 +65,7 @@ const EventManagementPage = () => {
     </div>
     <div className="event-management-page">
       <h2>Manage Events</h2>
-      <Link to="/create-event" className="btn btn-primary">Create New Event</Link>
+      <Link to="/event-create" className="btn btn-primary">Create New Event</Link>
       <table>
         <thead>
           <tr>
@@ -53,12 +78,21 @@ const EventManagementPage = () => {
         <tbody>
           {events.map(event => (
             <tr key={event.id}>
-              <td>{event.name}</td>
-              <td>{event.date}</td>
-              <td>{event.location}</td>
+              <td>{event.event_name}</td>
+              <td>{event.date_time}</td>
+              <td>{event.event_location}</td>
               <td>
-                <Link to={`/events/${event.id}`} className="btn btn-info">View</Link>
-                <Link to={`/edit-event/${event.id}`} className="btn btn-warning">Edit</Link>
+                <button className="btn btn-info p-0" onClick={() => setEvent(event.id)}>
+                  <Link to={`/invite`} className="btn">Create IVs</Link>
+                </button>
+                <button className='btn btn-warning p-0' onClick={() => setEvent(event.id)}>
+                  <Link to={`/rsvplist`} className="btn">View IVs</Link>
+                </button>
+                <button className='btn btn-secondary p-0' onClick={() => setEvent(event.id)}>
+                  <Link to={`/verification`} className='btn'>
+                    Verify Invitations
+                  </Link>
+                </button>
                 <button onClick={() => handleDelete(event.id)} className="btn btn-danger">Delete</button>
               </td>
             </tr>
