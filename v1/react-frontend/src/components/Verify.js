@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from "axios";
 import QrScan from 'react-qr-reader';
 import "./Verify.css"
@@ -20,21 +20,16 @@ const Verify = () => {
   };
   const [showInvited, setShowInvited] = useState(false);
   const [showUninvited, setShowUninvited] = useState(false);
-  // const { invitationId, eventId } = useParams();
+  const [showScanner, setShowScanner] = useState(true);
   const [qrscan, setQrscan] = useState('Scan');
+  const { eventId } = useParams();
 
 
-const location = useLocation();
-const params = new URLSearchParams(location.search);
+// const location = useLocation();
+// const params = new URLSearchParams(location.search);
 const verifyInvitation = (scannedValue) => {
-  const invitationId = params.get('invitationId');
-  const eventId = params.get('eventId');
-  console.log(invitationId);
   console.log(eventId);
-  axios(`${baseUrl}/verify_qrcode/${invitationId}/${eventId}`, {
-      headers: headers,
-      data: { qr_code: scannedValue }  // Send the scanned value in the request body
-    })
+  axios(`${baseUrl}/verify_qrcode/${scannedValue}/${eventId}`, {headers: headers})
       .then((response) => {
         if (response.status === 200) {
         console.log('User is invited')
@@ -55,6 +50,7 @@ const verifyInvitation = (scannedValue) => {
     if (data) {
       setQrscan(data); // Set the scanned QR code value
       verifyInvitation(data); // Verify the scanned QR code
+      setShowScanner(false);
     }
   };
 
@@ -66,31 +62,28 @@ const verifyInvitation = (scannedValue) => {
     <>
       <div>
         <div className="container">
+          {showInvited && (
+          <div className='container text-lg'>
+            <h1>This user is invited to this event</h1>
+          </div>
+          )}
+          {showUninvited && (
+            <div className='container text-lg'>
+              <h1>This user is not invited to this event</h1>
+            </div>
+          )}
           <div className="qr-header">
             <span>QR Scanner</span>
           </div>
-          <div className="qr-reader">
-            <QrScan
+          {showScanner &&(
+            <div className="qr-reader">
+             <QrScan
               onError={handleError} // Handle errors
               onScan={handleScan} // Use handleScan instead of verifyInvitation
             />
-          </div>
-          <textarea
-            className="textarea"
-            readOnly
-            value={qrscan}
-          />
+            </div>
+          )}
         </div>
-        {showInvited && (
-          <div>
-            This user is invited to this event
-          </div>
-        )}
-        {showUninvited && (
-          <div>
-            This user is not invited to this event
-          </div>
-        )}
       </div>
     </>
   );

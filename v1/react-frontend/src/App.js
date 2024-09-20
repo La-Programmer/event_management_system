@@ -32,7 +32,7 @@ const App = () => {
             <Route path="/admin/eventmanage" element={<EventManagement />}></Route>
             <Route path="/rsvp/:invitationId/:eventId" element={<InviteeRSVPPage />}></Route>
             <Route path="/rsvplist" element={<RSVPList />}></Route>
-            <Route path="/verification/:invitationId/:eventId" element={<Verify/>}></Route>
+            <Route path="/verification/:eventId" element={<Verify/>}></Route>
             <Route path="/invite" element={ <InvitationForm/> } />
           </Routes>
         </BrowserRouter>

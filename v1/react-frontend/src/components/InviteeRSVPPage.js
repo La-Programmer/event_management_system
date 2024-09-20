@@ -25,7 +25,7 @@ const InviteeRSVPPage = () => {
     } else {
       data.status = "false";
     }
-    axios.post(`${baseUrl}/rsvp/${invitationId}`, data)
+    axios.post(`${baseUrl}/rsvp_respond/${invitationId}`, data)
       .then((response) => {
         if (response.status == 200) {
           console.log("Response to invitation successful");
@@ -88,7 +88,7 @@ const InviteeRSVPPage = () => {
           <QRCode
             size={256}
             style={{ height: "auto", maxWidth: "30%", width: "30%" }}
-            value={`http://localhost:3000/verification/${invitationId}/${eventId}`}
+            value={invitationId}
             viewBox={`0 0 256 256`}
           />
         </div>

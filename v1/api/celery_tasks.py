@@ -34,9 +34,9 @@ def send_mail(invitation: dict, event: dict) -> None:
     msg = Message(
         subject=subject,
         sender="justinoghenekomeebedi@gmail.com",
-        recipients=[invitation['recipient_email'], 'justinebedi70@gmail.com']
+        recipients=[invitation['recipient_email']]
     )
-    msg.body = invitation.get('message')
+    msg.body = f"{invitation.get('message')}\nKindly click the link below to respond to your invitation\nhttp://localhost:3000/rsvp/{invitation['id']}/{event['id']}"
     mail = current_app.mail
     with current_app.app_context():
         counter = 0

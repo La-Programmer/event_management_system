@@ -89,7 +89,7 @@ const EventManagementPage = () => {
                   <Link to={`/rsvplist`} className="btn">View IVs</Link>
                 </button>
                 <button className='btn btn-secondary p-0' onClick={() => setEvent(event.id)}>
-                  <Link to={`/verification`} className='btn'>
+                  <Link to={`/verification/${event.id}`} className='btn'>
                     Verify Invitations
                   </Link>
                 </button>

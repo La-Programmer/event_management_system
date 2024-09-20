@@ -88,6 +88,18 @@
             "BearerAuth": []
           }
         ],
+        "parameters": [
+          {
+            "name": "user_email",
+            "in": "path",
+            "description": "Email used to get user",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "User gotten successfully",
@@ -128,6 +140,11 @@
         ],
         "summary": "Update a user",
         "operationId": "3",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "user_id",
@@ -325,6 +342,18 @@
             "BearerAuth": []
           }
         ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "ID used to get event",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Event gotten successfully",
@@ -358,7 +387,7 @@
         }
       }
     },
-    "/event/your_events": {
+    "/events/your_events": {
       "get": {
         "tags": [
           "events"
@@ -385,7 +414,7 @@
                     "result": {
                         "type": "array",
                         "items": {
-                          "$ref": "#/components/schemas/User"
+                          "$ref": "#/components/schemas/Event"
                         }
                     }
                   }
@@ -481,6 +510,18 @@
             "BearerAuth": []
           }
         ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "ID used to get event",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -546,6 +587,18 @@
         "security": [
           {
             "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "ID used to get event",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
           }
         ],
         "responses": {
@@ -639,6 +692,18 @@
             "BearerAuth": []
           }
         ],
+        "parameters": [
+          {
+            "name": "invitation_id",
+            "in": "path",
+            "description": "ID used to get invitation",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
         "responses": {
            "200": {
             "description": "Invitation gotten successfully",
@@ -682,6 +747,18 @@
         "security": [
           {
             "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "ID used to get event",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
           }
         ],
         "responses": {
@@ -729,6 +806,28 @@
         "security": [
           {
             "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "ID used to get event",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          },
+          {
+            "name": "status",
+            "in": "path",
+            "description": "Status of invitations to get",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
           }
         ],
         "responses": {
@@ -971,6 +1070,18 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "invitation_id",
+            "in": "path",
+            "description": "ID used to get invitation",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Invitation updated successfully",
@@ -1013,6 +1124,18 @@
         "security": [
           {
             "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "invitation_id",
+            "in": "path",
+            "description": "ID used to get invitation",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
           }
         ],
         "responses": {
@@ -1064,6 +1187,18 @@
             "application/json": {}
           }
         },
+        "parameters": [
+          {
+            "name": "invitation_id",
+            "in": "path",
+            "description": "ID used to get invitation",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Invitation sent out successfully",
@@ -1109,6 +1244,18 @@
             "application/json": {}
           }
         },
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "ID used to get event",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Invitations sent out successfully",
@@ -1144,6 +1291,18 @@
         ],
         "summary": "Get the data to display on RSVP page",
         "operationId": "21",
+        "parameters": [
+          {
+            "name": "invitation_id",
+            "in": "path",
+            "description": "ID used to get invitation",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
         "responses": {
             "200": {
             "description": "RSVP gotten successfully",
@@ -1198,6 +1357,18 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "invitation_id",
+            "in": "path",
+            "description": "ID used to get invitation to respond to",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Responded to invitation",
@@ -1226,7 +1397,7 @@
         }
       }
     },
-    "/verify_qrcode/{invitation_id/{event_id}": {
+    "/verify_qrcode/{invitation_id}/{event_id}": {
       "get": {
         "tags": [
           "rsvp"
@@ -1236,6 +1407,28 @@
         "security": [
           {
             "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "invitation_id",
+            "in": "path",
+            "description": "ID used to get invitation",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "ID used to get event",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
           }
         ],
         "responses": {
