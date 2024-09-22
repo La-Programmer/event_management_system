@@ -1,0 +1,48 @@
+
+.appContainer {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main {
+  margin-bottom: 20px;
+}
+
+.my-btn {
+  background-color: black;
+  padding: 15px 30px; 
+  font-size: 1.5rem; 
+  cursor: pointer;
+  background-color: #005fc4;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  transition: background-color 0.3s;
+}
+
+.my-btn:hover {
+  background-color: #002144;
+}
+
+.videoWrapper {
+  position: relative;
+  width: 350px; 
+  height: 350px; 
+  overflow: hidden; 
+  border-radius: 20px;
+  border: 2px solid #007bff; 
+}
+
+.qrVideo {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px; 
+  object-fit: cover; 
+}
+
+.scannedText {
+  margin-top: 10px;
+  font-size: 1.5rem; 
+}

@@ -11,7 +11,8 @@ import InviteeRSVPPage from "./components/InviteeRSVPPage";
 import RSVPList from "./components/RSVPList";
 import InvitationForm from "./components/InvitationForm";
 import Verify from "./components/Verify"
-import EventDetails from "./components/EventDetails";
+import Verify2 from "./components/Verify2";
+// import EventDetails from "./components/EventDetails";
 
 
 const App = () => {
@@ -33,6 +34,9 @@ const App = () => {
             <Route path="/rsvp/:invitationId/:eventId" element={<InviteeRSVPPage />}></Route>
             <Route path="/rsvplist" element={<RSVPList />}></Route>
             <Route path="/verification/:eventId" element={<Verify/>}></Route>
+            {/* verification hsing html5-qrcode */}
+            <Route path="/verification-v2/:eventId" element={<Verify2/>}></Route>   
+            
             <Route path="/invite" element={ <InvitationForm/> } />
           </Routes>
         </BrowserRouter>
